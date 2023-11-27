@@ -172,7 +172,7 @@ class admins_db():
         
 
 #Se Crea La Clase DB
-database = admins_db()
+admins = admins_db()
 
 #Iniciar
-database.inicializar_db()
+admins.inicializar_db()

@@ -172,7 +172,7 @@ class users_db():
         
 
 #Se Crea La Clase DB
-database = users_db()
+users = users_db()
 
 #Iniciar
-database.inicializar_db()
+users.inicializar_db()
