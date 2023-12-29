@@ -1,6 +1,6 @@
 import sqlite3
 import pyotp
-import time
+from flask import make_response
 
 class users_admins_db():
 
@@ -8,6 +8,18 @@ class users_admins_db():
     conexion = None
     db = None
     codigo = "B5YY3Q3HOXTK6XCW3SYJIEEVKFM2J3P3"
+
+    #Retorno De Mensajes
+    def message_return(self,text,status_code):
+
+        #Se Crea El Mensaje
+        message = make_response(text)
+
+        #Se Asigna El Satus Code
+        message.status_code = status_code
+
+        #Se Retorna El Mensaje
+        return message
 
     #Conectarse A La DB
     def conectar_db(self):
@@ -129,6 +141,9 @@ class users_admins_db():
         #Desconectar DB
         self.desconectar_DB
 
+        #Retorna Que Se Inicializo Bien La DB
+        return "DB Users And Admins Inicializado Correctamente"
+
     #Certificar Codigo OTP Para Usar Funciones
     def code_rol_validation(self, current_password):
 
@@ -231,12 +246,26 @@ class users_admins_db():
                 #Finalizar Conexion
                 self.desconectar_DB()
 
-                return {'Resultado':'Valido'}
+                #Se Crea La Respuesta A Enviar
+                message = make_response({"message":"user created"})
+
+                #Se Le Asigna El Status Code De Objeto Creado
+                message.status_code = 201
+                
+                #Se Retorna El Mensaje
+                return message
 
             #Si El Rol Es Un Administrador Y El Codigo Es Incorrecto Se Notifica El Error
             elif ((rol == 'Administrador') and not(self.code_rol_validation(codigo))):
                 
-                return {'Resultado':{'Error':'Invalid Code'}}
+                #Se Crea El Mensaje De Error
+                message = make_response({"message":"code invalid"})
+
+                #Se Le Asigna El Status Code Dato Invalido
+                message.status_code = 400
+
+                #Se Retorna El Mensaje
+                return message
 
 
             #Si El Rol Es Un Usuario Y No Tiene Codigo Se Añade Via "USER"
@@ -253,7 +282,14 @@ class users_admins_db():
                 #Finalizar Conexion
                 self.desconectar_DB()
 
-                return {'Resultado':'Valido'}
+                #Se Crea La Respuesta A Enviar
+                message = make_response({"message":"user created"})
+
+                #Se Le Asigna El Status Code De Objeto Creado
+                message.status_code = 201
+                
+                #Se Retorna El Mensaje
+                return message
 
         #Caso Contrario Se Revisa El Error Y Se Envia Para Ser Cambiado
         else:
@@ -263,15 +299,39 @@ class users_admins_db():
             
             #Si El Usuario Y El Correo Ya Existen
             if username == resp[0][1] and email == resp[0][2]:
-                return {'Resultado' : {'Error Repeat':{'Username','Email'}}}
+
+                #Se Crea El Mensaje
+                message = make_response({"message" : "username y email en uso"})
+
+                #Se Asigna El Status Code
+                message.status_code = 400
+
+                #Se Retorna El Mensaje
+                return message
 
             #Si El Usuario Existe Pero El Correo No
             elif username == resp[0][1] and not (email == resp[0][2]):
-                return {'Resultado' : {'Error Repeat':'Username'}}
+
+                #Se Crea El Mensaje
+                message = make_response({"message" : "username en uso"})
+
+                #Se Asigna El Status Code
+                message.status_code = 400
+
+                #Se Retorna El Mensaje
+                return message
 
             #Si El Correo Existe Pero El Usuario No
             elif not (username == resp[0][1]) and email == resp[0][2]:
-                return {'Resultado' : {'Error Repeat':'Email'}}
+
+                #Se Crea El Mensaje
+                message = make_response({"message" : "email en uso"})
+
+                #Se Asigna El Status Code
+                message.status_code = 400
+
+                #Se Retorna El Mensaje
+                return message
 
     #Modificar Balance
     def balance_update(self,id_usuario,balance_update,rol):
@@ -323,17 +383,23 @@ class users_admins_db():
             #Se Almance La Respuesta
             resp_2 = self.db.fetchall()
 
-            #Si Existe Coincidencia Se Retorna El Token Header
+            #Si Existe Coincidencia Se Retornan Todos Los Datos
             if resp_2:
-                return {'Resultado':{'Token Header':resp[0][3]}}
+
+                #Se Retorna El Mensaje
+                return self.message_return({"id":resp[0][0],"username":resp[0][1],"email":resp[0][2],"token_header":resp[0][3],"rol":resp[0][5],"balance":resp[0][6]},200)
             
             #Caso Contrario Se Retorna Contraseña Invalida
             else:
-                return {'Resultado':{'Error':'Contraseña Invalida'}}
+                
+                #Se Retorna El Mensaje
+                return self.message_return({"message":"invalid password"},404)
 
         #Caso Contrario Se Retorna Invalido
         else:
-            return {'Resultado':'Invalido'}
+
+            #Se Retorna El Mensaje
+            return self.message_return({"message":"invalid email"},404)
 
     #Devolver Datos Por Token Header
     def login_token_header(self,token_header):
@@ -354,16 +420,20 @@ class users_admins_db():
         
         #De Existir Se Retornan Su Datos
         if resp:
-            return {'Resultado':{'Cuenta':{'id':resp[0][0],'username':resp[0][1],'email':resp[0][2],'balance':resp[0][6],'rol':resp[0][5]}}}
-        
+
+            #Se Retorna El Mensaje
+            return self.message_return({"id":resp[0][0],"username":resp[0][1],"email":resp[0][2],"token_header":resp[0][3],"rol":resp[0][5],"balance":resp[0][6]},200)
+
         #Caso Contrario Se Retorna Invalido
         else:
-            return {'Resultado':'Invalido'}
+            
+            #Se Retorna El Mensaje
+            return self.message_return({"message":"invalid token"},401)
 
 #Se Crea La Clase DB
 users_and_admins = users_admins_db()
 
 #Iniciar
-users_and_admins.inicializar_db()
+print(users_and_admins.inicializar_db())
 
-print(users_and_admins.agregar_user('Test1','Keka4542','Test1@gmail.com','Usuario'))
+#print(users_and_admins.agregar_user('Test1','Keka4542','Test1@gmail.com','Usuario'))

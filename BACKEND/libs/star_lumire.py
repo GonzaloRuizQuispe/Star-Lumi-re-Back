@@ -1,4 +1,4 @@
-import orders_receipt_db, requests
+import requests
 
 class star_lumiere():
     
@@ -17,5 +17,3 @@ class star_lumiere():
         return resp.json()
 
 api_star_lumiere = star_lumiere()
-
-print(api_star_lumiere.user_balance())

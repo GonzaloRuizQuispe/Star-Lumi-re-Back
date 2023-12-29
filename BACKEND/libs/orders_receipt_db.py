@@ -85,14 +85,55 @@ class orders_receipt_db():
                 FOREIGN KEY (id_user) REFERENCES Data(id)
         )""")
 
+        #Actualizar La DB
+        self.actualizar_DB()
+
+        #Finalizar Conexion Con La DB
+        self.desconectar_DB()
+
+        #Retorna Que Se Inicializo Bien La DB
+        return "DB Orders And Receipt Inicializado Correctamente"
+
     #Agregar Categoria De Plataforma
-    def add_category_plataform():
-        pass
+    def add_category_plataform(self,name):
+        
+        #Se Conecta A La DB
+        self.conectar_db()
+
+        #Se Realiza El Comando
+        self.db.execute(f"""
+            SELECT * FROM C_Plataform WHERE name='{name}'
+        """)
+
+        #Se Guarda El Resultado
+        resp = self.db.fetchall()
+
+        #Se Verifica Que No Exista La Categoria En La DB
+        if not resp:
+            
+            #De No Existir Se Agrega A La DB
+            self.db.execute(f" INSERT INTO C_Plataform (name) VALUES ('{name}') ")
+
+            #Se Actualiza La DB
+            self.actualizar_DB()
+
+            #Se Desconecta De La DB
+            self.desconectar_DB()
+
+            #Retorna Mensaje Valido
+            return {'Resultado':'Valido'}
+
+        #Caso Contrario Se Retorna Que Existe La Categoria Con ID
+        else:
+            return {'Resultado':{'Category Exists ID':f'{resp[0][0]}'}}
 
     #Agregar Categoria De Servicio
-    def add_category_service():
+    def add_category_service(self):
         pass
-    
+  
+#Se Crea La Clase De Ordenes Y Recibos
 orders_and_receipt = orders_receipt_db()
 
-orders_and_receipt.inicializar_db()
+print(orders_and_receipt.inicializar_db())
+
+#print(orders_and_receipt.add_category_plataform('TIKTOK'))
