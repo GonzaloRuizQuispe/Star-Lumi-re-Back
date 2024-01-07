@@ -246,26 +246,14 @@ class users_admins_db():
                 #Finalizar Conexion
                 self.desconectar_DB()
 
-                #Se Crea La Respuesta A Enviar
-                message = make_response({"message":"user created"})
-
-                #Se Le Asigna El Status Code De Objeto Creado
-                message.status_code = 201
-                
-                #Se Retorna El Mensaje
-                return message
+                #Se Retorna Un Mensaje Notificando
+                return self.message_return({"message":"user created"},201)
 
             #Si El Rol Es Un Administrador Y El Codigo Es Incorrecto Se Notifica El Error
             elif ((rol == 'Administrador') and not(self.code_rol_validation(codigo))):
                 
-                #Se Crea El Mensaje De Error
-                message = make_response({"message":"code invalid"})
-
-                #Se Le Asigna El Status Code Dato Invalido
-                message.status_code = 400
-
-                #Se Retorna El Mensaje
-                return message
+                #Se Retorna Un Mensaje Notificando
+                return self.message_return({"message":"code invalid"},400)
 
 
             #Si El Rol Es Un Usuario Y No Tiene Codigo Se Añade Via "USER"
@@ -282,14 +270,8 @@ class users_admins_db():
                 #Finalizar Conexion
                 self.desconectar_DB()
 
-                #Se Crea La Respuesta A Enviar
-                message = make_response({"message":"user created"})
-
-                #Se Le Asigna El Status Code De Objeto Creado
-                message.status_code = 201
-                
-                #Se Retorna El Mensaje
-                return message
+                #Se Retorna Un Mensaje Notificando
+                return self.message_return({"message":"user created"},201)
 
         #Caso Contrario Se Revisa El Error Y Se Envia Para Ser Cambiado
         else:
@@ -300,38 +282,20 @@ class users_admins_db():
             #Si El Usuario Y El Correo Ya Existen
             if username == resp[0][1] and email == resp[0][2]:
 
-                #Se Crea El Mensaje
-                message = make_response({"message" : "username y email en uso"})
-
-                #Se Asigna El Status Code
-                message.status_code = 400
-
-                #Se Retorna El Mensaje
-                return message
+                #Se Retorna Un Mensaje Notificando
+                return self.message_return({"message" : "username y email en uso"},400)
 
             #Si El Usuario Existe Pero El Correo No
             elif username == resp[0][1] and not (email == resp[0][2]):
 
-                #Se Crea El Mensaje
-                message = make_response({"message" : "username en uso"})
-
-                #Se Asigna El Status Code
-                message.status_code = 400
-
-                #Se Retorna El Mensaje
-                return message
+                #Se Retorna Un Mensaje Notificando
+                return self.message_return({"message" : "username en uso"},400)
 
             #Si El Correo Existe Pero El Usuario No
             elif not (username == resp[0][1]) and email == resp[0][2]:
 
-                #Se Crea El Mensaje
-                message = make_response({"message" : "email en uso"})
-
-                #Se Asigna El Status Code
-                message.status_code = 400
-
-                #Se Retorna El Mensaje
-                return message
+                #Se Retorna Un Mensaje Notificando
+                return self.message_return({"message" : "email en uso"},400)
 
     #Modificar Balance
     def balance_update(self,id_usuario,balance_update,rol):

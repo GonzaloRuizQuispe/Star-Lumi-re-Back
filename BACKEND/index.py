@@ -107,11 +107,29 @@ def maintain():
         #Se Retorna Error De Procesamiento Para La Web
         return users_and_admins.message_return({"message":"server internal error"},500)
 
-#API Category 1 (Seleccionar Plataforma)
-@app.route('/category_plataform',methods=['GET'])
-def category_1():
+#API Category 1 (Mostrar O Agregar Categorias De Plataformas)
+@app.route('/category_plataform',methods=['GET','POST'])
+def category_plataform():
     try:
-        pass
+        
+        #Si El Metodo Es GET Se Retornan Todas Las Categorias
+        if request.method == 'GET':
+            
+            #Se Retornan Las Categorias Sin Necesidad De Datos
+            return (orders_and_receipt.view_category_plataform())
+        
+        #Si El Metodo Es POST Se Procede A Agregar Una Categoria De Plataforma
+        if request.method == 'POST':
+            
+            #Se Recolectan El Archivo JSON
+            data = request.json
+
+            #Se Agrega La Categoria Plataforma A La DB
+            result = orders_and_receipt.add_category_plataform(data['name'])
+
+            #Se Retorna El Mensaje
+            return (result)
+
     except Exception as e:
 
         #Se Extrae La Fecha Actual
@@ -125,6 +143,81 @@ def category_1():
         
         #Se Retorna Error De Procesamiento Para La Web
         return users_and_admins.message_return({"message":"server internal error"},500)
+
+#API Category 2 (Mostrar O Agregar Categorias De Servicios)
+@app.route('/category_service',methods=['GET','POST'])
+def category_service():
+    try:
+        
+        #Si El Metodo Es GET Se Retornan Todas Las Categorias
+        if request.method == 'GET':
+            
+            #Se Retornan Las Categorias Sin Necesidad De Datos
+            return (orders_and_receipt.view_category_service())
+        
+        #Si El Metodo Es POST Se Procede A Agregar Una Categoria De Plataforma
+        if request.method == 'POST':
+            
+            #Se Recolectan El Archivo JSON
+            data = request.json
+
+            #Se Agrega La Categoria Plataforma A La DB
+            result = orders_and_receipt.add_category_service(data['name'],data['id_c_plataform'])
+
+            #Se Retorna El Mensaje
+            return (result)
+
+    except Exception as e:
+
+        #Se Extrae La Fecha Actual
+        fecha_actual = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Obtiene la fecha y hora actual
+        
+        #Se Genera El Mensaje De Error
+        mensaje_error = f'{fecha_actual} - Se ha producido un error en /category_service: {str(e)}\n'
+
+        #Se guarda En Un Archivo Llamado errores.txt
+        with open('errores.txt', 'a') as archivo: archivo.write(mensaje_error)
+        
+        #Se Retorna Error De Procesamiento Para La Web
+        return users_and_admins.message_return({"message":"server internal error"},500)
+
+#API Services (Mostrar Servicios)
+@app.route('/service',methods=['GET','POST'])
+def service():
+    try:
+        
+        #Si El Metodo Es GET Se Retornan Todas Las Categorias
+        if request.method == 'GET':
+            
+            #Se Retornan Las Categorias Sin Necesidad De Datos
+            return (orders_and_receipt.view_services(data['id_c_service']))
+        
+        #Si El Metodo Es POST Se Procede A Agregar Una Categoria De Plataforma
+        if request.method == 'POST':
+            
+            #Se Recolectan El Archivo JSON
+            data = request.json
+
+            #Se Agrega La Categoria Plataforma A La DB
+            result = orders_and_receipt.add_service(data['id_c_service'],data['name'],data['description'],data['type'],data['min'],data['max'],data['rate_o'])
+
+            #Se Retorna El Mensaje
+            return (result)
+
+    except Exception as e:
+
+        #Se Extrae La Fecha Actual
+        fecha_actual = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Obtiene la fecha y hora actual
+        
+        #Se Genera El Mensaje De Error
+        mensaje_error = f'{fecha_actual} - Se ha producido un error en /service: {str(e)}\n'
+
+        #Se guarda En Un Archivo Llamado errores.txt
+        with open('errores.txt', 'a') as archivo: archivo.write(mensaje_error)
+        
+        #Se Retorna Error De Procesamiento Para La Web
+        return users_and_admins.message_return({"message":"server internal error"},500)
+
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000, threaded=True)
