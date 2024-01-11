@@ -10,8 +10,6 @@ app = Flask(__name__)
 
 #Se Configura El Cors
 cors = CORS(app, resources={r"/*":{"origins":"*"}}, supports_credentials=True)
-def verificar():
-    pass
 
 #Saber Si Esta Prendido
 @app.route('/')
@@ -50,7 +48,7 @@ def register():
         return users_and_admins.message_return({"message":"server internal error"},500)
 
 #API Login
-@app.route('/login',methods=['GET'])
+@app.route('/login',methods=['POST'])
 def login():
     try:
 
@@ -79,16 +77,16 @@ def login():
         #Se Retorna Error De Procesamiento Para La Web
         return users_and_admins.message_return({"message":"server internal error"},500)
 
-#API Login Maintain
-@app.route('/maintain',methods=['GET'])
-def maintain():
+#API Login verify
+@app.route('/verify',methods=['POST'])
+def verify():
     try:
 
         #Se Recolecta El Archivo JSON
         data = request.json
 
         #Se Utiliza La Funcion Login Por Token Header
-        result = users_and_admins.login_token_header(data['Token Header'])
+        result = users_and_admins.login_token_header(data['token_header'])
 
         #Se Retornar El Resultado De La Función
         return (result)
@@ -124,11 +122,8 @@ def category_plataform():
             #Se Recolectan El Archivo JSON
             data = request.json
 
-            #Se Agrega La Categoria Plataforma A La DB
-            result = orders_and_receipt.add_category_plataform(data['name'])
-
-            #Se Retorna El Mensaje
-            return (result)
+            #Se Agrega La Categoria Plataforma A La DB Y Se Retorna El Mensaje
+            return orders_and_receipt.add_category_plataform(data['name'])
 
     except Exception as e:
 
@@ -197,12 +192,9 @@ def service():
             
             #Se Recolectan El Archivo JSON
             data = request.json
-
-            #Se Agrega La Categoria Plataforma A La DB
-            result = orders_and_receipt.add_service(data['id_c_service'],data['name'],data['description'],data['type'],data['min'],data['max'],data['rate_o'])
-
-            #Se Retorna El Mensaje
-            return (result)
+            
+            #Se Agrega La Categoria Plataforma A La DB Y Se Retorna El Mensaje
+            return orders_and_receipt.add_service(data['id_c_service'],data['name'],data['description'],data['type'],data['min'],data['max'],data['rate_o'])
 
     except Exception as e:
 
