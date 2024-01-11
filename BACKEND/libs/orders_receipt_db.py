@@ -1,12 +1,6 @@
 import sqlite3
 from flask import make_response
 
-#API_KEY = "e7b761  fad2ea99e47e529cad1a06671f" #Infinity
-#API_URL = "https://infinityupgraders.com/api/v2" #Infinity
-
-#API_KEY = "393791242c29a4efc1b2a98b20afd364" #Original?
-#API_URL = "https://worldofsmm.com/api/v2" #Original?
-
 class orders_receipt_db():
 
     #Variables Recursiva
