@@ -2,7 +2,7 @@
 FROM python:3.9
 
 # Establece el directorio de trabajo en /app
-WORKDIR /app
+WORKDIR /BACKEND/app
 
 # Copia el archivo requirements.txt al contenedor
 COPY requirements.txt .
