@@ -4,7 +4,7 @@ app = Flask(__name__)
 @app.route('/')
 def raiz():
     titulo = "pagina inicio"
-    return render_template('inicio.html', titulo=titulo)
+    return '<h5 class="card-title">Bienvenido a nosotros</h5>'
 
 # ruta para nosotros
 @app.route('/nosotros')
