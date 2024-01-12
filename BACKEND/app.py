@@ -105,7 +105,7 @@ def verify():
         #Se Retorna Error De Procesamiento Para La Web
         return users.message_return({"message":"server internal error"},500)
 
-#API Category 1 (Mostrar O Agregar Categorias De Plataformas)
+""" #API Category 1 (Mostrar O Agregar Categorias De Plataformas)
 @app.route('/category_plataform',methods=['GET','POST'])
 def category_plataform():
     try:
@@ -209,7 +209,7 @@ def service():
         
         #Se Retorna Error De Procesamiento Para La Web
         return users.message_return({"message":"server internal error"},500)
-
+ """
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000, threaded=True)
