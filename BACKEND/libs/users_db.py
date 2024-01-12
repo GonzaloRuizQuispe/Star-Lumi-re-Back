@@ -1,8 +1,10 @@
-import sqlite3
 import pyotp
 from flask import make_response
+from dotenv import load_dotenv
+import os
+import MySQLdb
 
-class users_admins_db():
+class users_db():
 
     #Variables Recursiva
     conexion = None
@@ -24,23 +26,30 @@ class users_admins_db():
     #Conectarse A La DB
     def conectar_db(self):
 
-        #Crear Conexion
-        self.conexion = sqlite3.connect('BACKEND/database/database.db')
+        #Cargar Datos De .env
+        load_dotenv()
 
-        #Crear Cursos Para Comandos
+        #Crear Conexion
+        self.conexion = MySQLdb.connect(
+            #Host, Username, Password, Name DB, AutoCommit, AUTH.
+            host=os.getenv("DATABASE_HOST"),
+            user=os.getenv("DATABASE_USERNAME"),
+            passwd=os.getenv("DATABASE_PASSWORD"),
+            db=os.getenv("DATABASE"),
+            autocommit=True,
+            ssl_mode="VERIFY_IDENTITY",
+            ssl={ "rejecUnauthorized": False }
+        )
+
+        #Crear Cursor
         self.db = self.conexion.cursor()
 
     #Desconecarse De La DB
     def desconectar_DB(self):
 
-        #Cerrar DB
+        #Cerrar Cursor Y DB
+        self.db.close()
         self.conexion.close()
-
-    #Actualizar DB
-    def actualizar_DB(self):
-
-        #Actulizar DB
-        self.conexion.commit()
 
     #Inicializar La DB Si Es Que No Existe
     def inicializar_db(self):
@@ -51,10 +60,10 @@ class users_admins_db():
         #Crear Tabla Admins
         self.db.execute("""
             CREATE TABLE IF NOT EXISTS Administrador(
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                username VARCHAR(999999) NOT NULL,
-                password VARCHAR(999999) NOT NULL,
-                email VARCHAR(999999) NOT NULL,
+                id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                username VARCHAR(1024) NOT NULL,
+                password VARCHAR(1024) NOT NULL,
+                email VARCHAR(1024) NOT NULL,
                 token_header VARCHAR(64) NOT NULL,
                 token_acceso VARCHAR(32) NOT NULL,
                 rol VARCHAR (50) NOT NULL DEFAULT 'Administrador',
@@ -64,79 +73,15 @@ class users_admins_db():
         #Crear Tabla Usuarios
         self.db.execute("""
             CREATE TABLE IF NOT EXISTS Usuario(
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                username VARCHAR(999999) NOT NULL,
-                password VARCHAR(999999) NOT NULL,
-                email VARCHAR(999999) NOT NULL,
+                id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                username VARCHAR(1024) NOT NULL,
+                password VARCHAR(1024) NOT NULL,
+                email VARCHAR(1024) NOT NULL,
                 token_header VARCHAR(64) NOT NULL,
                 token_acceso VARCHAR(32) NOT NULL,
                 rol VARCHAR (50) NOT NULL DEFAULT 'Usuario',
                 balance REAL NOT NULL
         )""")
-
-        #Crear Tabla Datos
-        self.db.execute("""
-            CREATE TABLE IF NOT EXISTS Data(
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                username VARCHAR (999999) NOT NULL,
-                email VARCHAR (999999) NOT NULL,
-                token_header VARCHAR (64) NOT NULL,
-                token_acceso VARCHAR (32) NOT NULL,
-                rol VARCHAR (50) NOT NULL,
-                balance REAL NOT NULL
-            )
-        """)
-
-        #Crear Trigger Para Llenar La Tabla Data Con Usuarios
-        self.db.execute('''
-            CREATE TRIGGER IF NOT EXISTS agregar_token_usuario
-            AFTER INSERT ON Usuario 
-            BEGIN
-                INSERT INTO data (username, email, token_header, token_acceso, rol, balance)
-                VALUES (NEW.username, NEW.email, NEW.token_header, NEW.token_acceso, NEW.rol, NEW.balance);
-            END;
-        ''')
-
-        #Crear Trigger Para Actualizar Cambios De La Tabla Data Con Usuarios
-        self.db.execute('''
-            CREATE TRIGGER IF NOT EXISTS actualizar_data_usuarios
-            AFTER UPDATE ON Usuario 
-            BEGIN
-                UPDATE data
-                SET 
-                    username = COALESCE(NEW.username, data.username),
-                    email = COALESCE(NEW.email, data.email),
-                    balance = COALESCE(NEW.balance, data.balance)
-                WHERE data.token_header = NEW.token_header;
-            END;
-        ''')
-
-        #Crear Trigger Para Llenar La Tabla Data Con Administradores
-        self.db.execute('''
-            CREATE TRIGGER IF NOT EXISTS agregar_token_administrador
-            AFTER INSERT ON Administrador 
-            BEGIN
-                INSERT INTO data (username, email, token_header, token_acceso, rol, balance)
-                VALUES (NEW.username, NEW.email, NEW.token_header, NEW.token_acceso, NEW.rol, NEW.balance);
-            END;
-        ''')
-
-        #Crear Trigger Para Actualizar Cambios De La Tabla Data Con Administradores
-        self.db.execute('''
-            CREATE TRIGGER IF NOT EXISTS actualizar_data_administradores
-            AFTER UPDATE ON Administrador 
-            BEGIN
-                UPDATE data
-                SET 
-                    username = COALESCE(NEW.username, data.username),
-                    email = COALESCE(NEW.email, data.email),
-                    balance = COALESCE(NEW.balance, data.balance)
-                WHERE data.token_header = NEW.token_header;
-            END;
-        ''')
-
-        #Actualizar DB
-        self.actualizar_DB()
 
         #Desconectar DB
         self.desconectar_DB
@@ -174,7 +119,7 @@ class users_admins_db():
         #No Requiere De Conectarse Ya Que Se Usa Dentro De Otra Funcion
         #Se Consulta En La DB La Tabla De "Data" Si Existe Algun Token Similar
         self.db.execute(f"""
-            SELECT * FROM Data WHERE token_header = '{token}'
+            SELECT * FROM Usuario WHERE token_header = '{token}'
         """)
 
         #Se Guarda La Respuesta
@@ -196,7 +141,7 @@ class users_admins_db():
         #No Requiere De Conectarse Ya Que Se Usa Dentro De Otra Funcion
         #Se Consulta En La DB La Tabla De "Data" Si Existe Algun Token Similar
         self.db.execute(f"""
-            SELECT * FROM Data WHERE token_acceso = '{token}'
+            SELECT * FROM Usuario WHERE token_acceso = '{token}'
         """)
 
         #Se Guarda La Respuesta
@@ -217,12 +162,12 @@ class users_admins_db():
 
         #Buscar Similitud En Los Datos
         self.db.execute(f"""
-            SELECT * FROM Data WHERE username='{username}' or email='{email}'
+            SELECT * FROM {rol} WHERE username='{username}' or email='{email}'
         """)
 
         #Se Guardan Los Valores
         resp = self.db.fetchall()
-
+    
         #De No Hallar Similitud Se Agrega El Usuario
         if not resp:
 
@@ -239,9 +184,6 @@ class users_admins_db():
                 self.db.execute(f"""
                     INSERT INTO {rol} (username,password,email,token_header,token_acceso,balance) VALUES ('{username}','{password}','{email}','{token_header}','{token_acceso}','0')
                 """)
-
-                #Commit En La DB
-                self.actualizar_DB()
 
                 #Finalizar Conexion
                 self.desconectar_DB()
@@ -264,9 +206,6 @@ class users_admins_db():
                     INSERT INTO {rol} (username,password,email,token_header,token_acceso,balance) VALUES ('{username}','{password}','{email}','{token_header}','{token_acceso}','0')
                 """)
 
-                #Commit En La DB
-                self.actualizar_DB()
-
                 #Finalizar Conexion
                 self.desconectar_DB()
 
@@ -275,24 +214,24 @@ class users_admins_db():
 
         #Caso Contrario Se Revisa El Error Y Se Envia Para Ser Cambiado
         else:
-                
+            
             #Desconectar De La DB
             self.desconectar_DB()
             
             #Si El Usuario Y El Correo Ya Existen
-            if username == resp[0][1] and email == resp[0][2]:
+            if username == resp[0][1] and email == resp[0][3]:
 
                 #Se Retorna Un Mensaje Notificando
                 return self.message_return({"message" : "username y email en uso"},400)
 
             #Si El Usuario Existe Pero El Correo No
-            elif username == resp[0][1] and not (email == resp[0][2]):
+            elif username == resp[0][1] and not (email == resp[0][3]):
 
                 #Se Retorna Un Mensaje Notificando
                 return self.message_return({"message" : "username en uso"},400)
 
             #Si El Correo Existe Pero El Usuario No
-            elif not (username == resp[0][1]) and email == resp[0][2]:
+            elif not (username == resp[0][1]) and email == resp[0][3]:
 
                 #Se Retorna Un Mensaje Notificando
                 return self.message_return({"message" : "email en uso"},400)
@@ -316,11 +255,11 @@ class users_admins_db():
             UPDATE {rol} SET balance='{float(resp[0][7])+float(balance_update)}' WHERE id='{int(id_usuario)}'
         """)
 
-        #Actualizar Cambios
-        self.actualizar_DB()
-        
         #Desconectar De La DB
         self.desconectar_DB()
+
+        #Retorna Mensaje Junto Al Status
+        return self.message_return({"message":"balance update"},201)
         
     #Devolver Datos Por Email/Contraseña
     def login_email_pass(self,email,password):
@@ -330,7 +269,7 @@ class users_admins_db():
 
         #Se Realiza La Busqueda
         self.db.execute(f"""
-            SELECT * FROM Data WHERE email='{email}'
+            SELECT * FROM Usuario WHERE email='{email}'
         """)
 
         #Se Almacena La Respuesta
@@ -341,7 +280,7 @@ class users_admins_db():
 
             #Se Realiza La Busqueda Por Rol Del Email Y Contraseña
             self.db.execute(f"""
-                SELECT * FROM {resp[0][5]} WHERE email='{email}' and password='{password}'
+                SELECT * FROM Usuario WHERE email='{email}' and password='{password}'
             """)
 
             #Se Almance La Respuesta
@@ -373,7 +312,7 @@ class users_admins_db():
 
         #Se Realiza La Busqueda
         self.db.execute(f"""
-            SELECT * FROM Data WHERE token_header = '{token_header}'
+            SELECT * FROM Usuario WHERE token_header = '{token_header}'
         """)
 
         #Se Almacenan Los Resultados De La Busqueda
@@ -398,9 +337,11 @@ class users_admins_db():
             return self.message_return({"message":"invalid token"},401)
 
 #Se Crea La Clase DB
-users_and_admins = users_admins_db()
+users = users_db()
 
 #Iniciar
-print(users_and_admins.inicializar_db())
+#print(users.inicializar_db())
 
-#print(users_and_admins.agregar_user('Test1','Keka4542','Test1@gmail.com','Usuario'))
+#print(users.balance_update(1,5,"Usuario"))
+
+#print(users.login_email_pass("Test1@gmail.com","Keka4542"))

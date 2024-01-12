@@ -1,8 +1,8 @@
 from flask import Flask, request
 from flask_cors import CORS
-from libs.users_admins_db import users_and_admins
-from libs.orders_receipt_db import orders_and_receipt
-from libs.star_lumire import api_star_lumiere
+from libs.users_db import users
+#from libs.orders_receipt_db import orders_and_receipt
+#from libs.star_lumire import api_star_lumiere
 import datetime
 
 #Se Crea La Web App
@@ -27,7 +27,7 @@ def register():
         data = request.json
 
         #Se Utiliza La Funcion De Agregar A Database
-        result = users_and_admins.agregar_user(data['username'],data['password'],data['email'],data['rol'])
+        result = users.agregar_user(data['username'],data['password'],data['email'],data['rol'])
 
         #Se Retorna El Resultado De La Funcion De La DB
         return (result)
@@ -45,7 +45,7 @@ def register():
         with open('errores.txt', 'a') as archivo: archivo.write(mensaje_error)
         
         #Se Retorna Error De Procesamiento Para La Web
-        return users_and_admins.message_return({"message":"server internal error"},500)
+        return users.message_return({"message":"server internal error"},500)
 
 #API Login
 @app.route('/login',methods=['POST'])
@@ -56,7 +56,7 @@ def login():
         data = request.json
 
         #Se Utiliza La Funcion Login Por Email Y Password
-        result = users_and_admins.login_email_pass(data['email'],data['password'])
+        result = users.login_email_pass(data['email'],data['password'])
 
         #Se Retorna El Resultado De La Funcion
         return (result)
@@ -75,7 +75,7 @@ def login():
         with open('errores.txt', 'a') as archivo: archivo.write(mensaje_error)
         
         #Se Retorna Error De Procesamiento Para La Web
-        return users_and_admins.message_return({"message":"server internal error"},500)
+        return users.message_return({"message":"server internal error"},500)
 
 #API Login verify
 @app.route('/verify',methods=['POST'])
@@ -86,7 +86,7 @@ def verify():
         data = request.json
 
         #Se Utiliza La Funcion Login Por Token Header
-        result = users_and_admins.login_token_header(data['token_header'])
+        result = users.login_token_header(data['token_header'])
 
         #Se Retornar El Resultado De La Función
         return (result)
@@ -103,7 +103,7 @@ def verify():
         with open('errores.txt', 'a') as archivo: archivo.write(mensaje_error)
         
         #Se Retorna Error De Procesamiento Para La Web
-        return users_and_admins.message_return({"message":"server internal error"},500)
+        return users.message_return({"message":"server internal error"},500)
 
 #API Category 1 (Mostrar O Agregar Categorias De Plataformas)
 @app.route('/category_plataform',methods=['GET','POST'])
@@ -137,7 +137,7 @@ def category_plataform():
         with open('errores.txt', 'a') as archivo: archivo.write(mensaje_error)
         
         #Se Retorna Error De Procesamiento Para La Web
-        return users_and_admins.message_return({"message":"server internal error"},500)
+        return users.message_return({"message":"server internal error"},500)
 
 #API Category 2 (Mostrar O Agregar Categorias De Servicios)
 @app.route('/category_service',methods=['GET','POST'])
@@ -174,7 +174,7 @@ def category_service():
         with open('errores.txt', 'a') as archivo: archivo.write(mensaje_error)
         
         #Se Retorna Error De Procesamiento Para La Web
-        return users_and_admins.message_return({"message":"server internal error"},500)
+        return users.message_return({"message":"server internal error"},500)
 
 #API Services (Mostrar Servicios)
 @app.route('/service',methods=['GET','POST'])
@@ -208,7 +208,7 @@ def service():
         with open('errores.txt', 'a') as archivo: archivo.write(mensaje_error)
         
         #Se Retorna Error De Procesamiento Para La Web
-        return users_and_admins.message_return({"message":"server internal error"},500)
+        return users.message_return({"message":"server internal error"},500)
 
 
 if __name__ == "__main__":

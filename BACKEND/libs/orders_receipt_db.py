@@ -1,5 +1,8 @@
 import sqlite3
 from flask import make_response
+from dotenv import load_dotenv
+import os
+import MySQLdb
 
 class orders_receipt_db():
 
@@ -22,23 +25,30 @@ class orders_receipt_db():
     #Conectarse A La DB
     def conectar_db(self):
 
-        #Crear Conexion
-        self.conexion = sqlite3.connect('BACKEND/database/database.db')
+        #Cargar Datos De .env
+        load_dotenv()
 
-        #Crear Cursos Para Comandos
+        #Crear Conexion
+        self.conexion = MySQLdb.connect(
+            #Host, Username, Password, Name DB, AutoCommit, AUTH.
+            host=os.getenv("DATABASE_HOST"),
+            user=os.getenv("DATABASE_USERNAME"),
+            passwd=os.getenv("DATABASE_PASSWORD"),
+            db=os.getenv("DATABASE"),
+            autocommit=True,
+            ssl_mode="VERIFY_IDENTITY",
+            ssl={ "rejecUnauthorized": False }
+        )
+
+        #Crear Cursor
         self.db = self.conexion.cursor()
 
     #Desconecarse De La DB
     def desconectar_DB(self):
 
-        #Cerrar DB
+        #Cerrar Cursor Y DB
+        self.db.close()
         self.conexion.close()
-
-    #Actualizar DB
-    def actualizar_DB(self):
-
-        #Actulizar DB
-        self.conexion.commit()
 
     #Inicializar DB
     def inicializar_db(self):
@@ -49,14 +59,14 @@ class orders_receipt_db():
         #Crear Tabla Category Plataform Si Es Que No Existe
         self.db.execute("""
             CREATE TABLE IF NOT EXISTS C_Plataform(
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id INTEGER PRIMARY KEY AUTO_INCREMENT,
                 name VARCHAR(255) NOT NULL
         )""")
 
         #Crear Tabla Category Services Si Es Que No Existe
         self.db.execute("""
             CREATE TABLE IF NOT EXISTS C_Service(
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id INTEGER PRIMARY KEY AUTO_INCREMENT,
                 id_c_plataform INTEGER NOT NULL,
                 name VARCHAR(255) NOT NULL,
                 FOREIGN KEY (id_c_plataform) REFERENCES C_Plataform(id)
@@ -65,7 +75,7 @@ class orders_receipt_db():
         #Crear Tabla Servicios Si Es Que No Existe
         self.db.execute("""
             CREATE TABLE IF NOT EXISTS Service(
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id INTEGER PRIMARY KEY AUTO_INCREMENT,
                 id_c_service INTEGER NOT NULL,
                 name VARCHAR(255) NOT NULL,
                 description VARCHAR(255),
@@ -80,7 +90,7 @@ class orders_receipt_db():
         #Crear Tabla De Ordenes (Recibos)
         self.db.execute("""
             CREATE TABLE IF NOT EXISTS Orders(
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id INTEGER PRIMARY KEY AUTO_INCREMENT,
                 id_original INTEGER NOT NULL,
                 id_user INTEGER NOT NULL,
                 date DATETIME NOT NULL,
