@@ -2,7 +2,7 @@ import pyotp
 from flask import make_response
 from dotenv import load_dotenv
 import os
-import MySQLdb
+import pymysql
 
 class users_db():
 
@@ -30,14 +30,13 @@ class users_db():
         load_dotenv()
 
         #Crear Conexion
-        self.conexion = MySQLdb.connect(
+        self.conexion = pymysql.connect(
             #Host, Username, Password, Name DB, AutoCommit, AUTH.
             host=os.getenv("DATABASE_HOST"),
             user=os.getenv("DATABASE_USERNAME"),
             passwd=os.getenv("DATABASE_PASSWORD"),
             db=os.getenv("DATABASE"),
             autocommit=True,
-            ssl_mode="VERIFY_IDENTITY",
             ssl={ "rejecUnauthorized": False }
         )
 
