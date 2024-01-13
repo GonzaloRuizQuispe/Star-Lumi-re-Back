@@ -245,19 +245,19 @@ class users_and_admins():
             self.desconectar_DB()
             
             #Si El Usuario Y El Correo Ya Existen
-            if username == resp[0][1] and email == resp[0][3]:
+            if username == resp[0][0] and email == resp[0][1]:
 
                 #Se Retorna Un Mensaje Notificando
                 return self.message_return({"message" : "username y email en uso"},400)
 
             #Si El Usuario Existe Pero El Correo No
-            elif username == resp[0][1] and not (email == resp[0][3]):
+            elif username == resp[0][0] and not (email == resp[0][1]):
 
                 #Se Retorna Un Mensaje Notificando
                 return self.message_return({"message" : "username en uso"},400)
 
             #Si El Correo Existe Pero El Usuario No
-            elif not (username == resp[0][1]) and email == resp[0][3]:
+            elif not (username == resp[0][0]) and email == resp[0][1]:
 
                 #Se Retorna Un Mensaje Notificando
                 return self.message_return({"message" : "email en uso"},400)
