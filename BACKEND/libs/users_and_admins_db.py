@@ -86,6 +86,7 @@ class users_and_admins():
         self.db.execute("""
             CREATE TABLE IF NOT EXISTS Data(
                 username VARCHAR(1024) NOT NULL,
+                password VARCHAR(1024) NOT NULL,
                 email VARCHAR(1024) NOT NULL,
                 token_header VARCHAR(64) NOT NULL,
                 rol VARCHAR (50) NOT NULL 
@@ -164,14 +165,14 @@ class users_and_admins():
             return self.gen_token_acceso()
 
     #Trigger Insert Data
-    def trigger_data(self,username,email,token_header,rol):
+    def trigger_data(self,username,password,email,token_header,rol):
 
         #Conectar DB
         self.conectar_db()
 
         #Agregar Datos
         self.db.execute(f"""
-            INSERT INTO Data (username,email,token_header,rol) VALUES ('{username}','{email}','{token_header}','{rol}')
+            INSERT INTO Data (username,password,email,token_header,rol) VALUES ('{username}','{password}','{email}','{token_header}','{rol}')
         """)
 
     #Agregar Usuario
@@ -209,7 +210,7 @@ class users_and_admins():
                 self.desconectar_DB()
 
                 #Trigger Data
-                self.trigger_data(username,email,token_header,rol)
+                self.trigger_data(username,password,email,token_header,rol)
 
                 #Se Retorna Un Mensaje Notificando
                 return self.message_return({"message":"user created"},201)
@@ -233,7 +234,7 @@ class users_and_admins():
                 self.desconectar_DB()
 
                 #Trigger Data
-                self.trigger_data(username,email,token_header,rol)
+                self.trigger_data(username,password,email,token_header,rol)
 
                 #Se Retorna Un Mensaje Notificando
                 return self.message_return({"message":"user created"},201)
@@ -245,25 +246,25 @@ class users_and_admins():
             self.desconectar_DB()
             
             #Si El Usuario Y El Correo Ya Existen
-            if username == resp[0][0] and email == resp[0][1]:
+            if username == resp[0][0] and email == resp[0][2]:
 
                 #Se Retorna Un Mensaje Notificando
                 return self.message_return({"message" : "username y email en uso"},400)
 
             #Si El Usuario Existe Pero El Correo No
-            elif username == resp[0][0] and not (email == resp[0][1]):
+            elif username == resp[0][0] and not (email == resp[0][2]):
 
                 #Se Retorna Un Mensaje Notificando
                 return self.message_return({"message" : "username en uso"},400)
 
             #Si El Correo Existe Pero El Usuario No
-            elif not (username == resp[0][0]) and email == resp[0][1]:
+            elif not (username == resp[0][0]) and email == resp[0][2]:
 
                 #Se Retorna Un Mensaje Notificando
                 return self.message_return({"message" : "email en uso"},400)
 
     #Identificar Rol Con Token Header
-    def identify_rol(self,token_header):
+    def identify_rol_token_header(self,token_header):
         
         #Conectar DB
         self.conectar_db()
@@ -279,18 +280,56 @@ class users_and_admins():
         #Desconectar DB
         self.desconectar_DB()
 
-        #Retornar Mensaje Con El Rol
-        return resp[0][1]
+        #Si El Token No Existe Se Retorna Falso
+        if not resp:
+            
+            return False
+
+        #Caso Contrario Se Retorna El Rol
+        else:
+            #Retornar Mensaje Con El Rol
+            return resp[0][4]
+
+    #Identificar Rol Con Email, Password
+    def identify_rol_email_password(self,email,password):
+        
+        #Conectar DB
+        self.conectar_db()
+
+        #Realizar Consulta
+        self.db.execute(f"""
+            SELECT * FROM Data WHERE email='{email}' and password='{password}'
+        """)
+
+        #Guardar Respuesta
+        resp = self.db.fetchall()
+
+        #Desconectar DB
+        self.desconectar_DB()
+
+        #Si Esta Vacio Se Retorna Falso
+        if not resp:
+
+            return False
+
+        #Caso Contrario Se Retorna El Rol
+        else:
+
+            #Retornar Mensaje Con El Rol
+            return resp[0][4]
 
     #Modificar Balance
-    def balance_update(self,id_usuario,balance_update,rol):
+    def balance_update(self,token_header,balance_update):
+
+        #Identificar Rol
+        rol = self.identify_rol_token_header(token_header)
 
         #Conectar DB
         self.conectar_db()
 
         #Extraer Balance Original Para Sumarle El Nuevo
         self.db.execute(f"""
-            SELECT * FROM {rol} WHERE id='{id_usuario}'
+            SELECT * FROM {rol} WHERE token_header='{token_header}'
         """)
 
         #Se Guarda La Respuesta De Busqueda
@@ -306,45 +345,56 @@ class users_and_admins():
 
         #Retorna Mensaje Junto Al Status
         return self.message_return({"message":"balance update"},201)
-        
+
     #Devolver Datos Por Email/Contraseña
     def login_email_pass(self,email,password):
         
-        #Conectar DB
-        self.conectar_db()
+        #Identificar Rol
+        rol = self.identify_rol_email_password(email,password)
 
-        #Se Realiza La Busqueda
-        self.db.execute(f"""
-            SELECT * FROM Usuario WHERE email='{email}'
-        """)
+        if rol:
 
-        #Se Almacena La Respuesta
-        resp = self.db.fetchall()
+            #Conectar DB
+            self.conectar_db()
 
-        #Si Existe El Email Segun Su Rol Se Verifica En Su Tabla
-        if resp:
-
-            #Se Realiza La Busqueda Por Rol Del Email Y Contraseña
+            #Se Realiza La Busqueda
             self.db.execute(f"""
-                SELECT * FROM Usuario WHERE email='{email}' and password='{password}'
+                SELECT * FROM {rol} WHERE email='{email}'
             """)
 
-            #Se Almance La Respuesta
-            resp_2 = self.db.fetchall()
+            #Se Almacena La Respuesta
+            resp = self.db.fetchall()
 
-            #Si Existe Coincidencia Se Retornan Todos Los Datos
-            if resp_2:
+            #Si Existe El Email Segun Su Rol Se Verifica En Su Tabla
+            if resp:
 
-                #Se Retorna El Mensaje
-                return self.message_return({"id":resp[0][0],"username":resp[0][1],"email":resp[0][3],"token_header":resp[0][4],"rol":resp[0][6],"balance":resp[0][7]},200)
-            
-            #Caso Contrario Se Retorna Contraseña Invalida
-            else:
+                #Se Realiza La Busqueda Por Rol Del Email Y Contraseña
+                self.db.execute(f"""
+                    SELECT * FROM {rol} WHERE email='{email}' and password='{password}'
+                """)
+
+                #Se Almance La Respuesta
+                resp_2 = self.db.fetchall()
+
+                #Si Existe Coincidencia Se Retornan Todos Los Datos
+                if resp_2:
+
+                    #Se Retorna El Mensaje
+                    return self.message_return({"id":resp[0][0],"username":resp[0][1],"email":resp[0][3],"token_header":resp[0][4],"rol":resp[0][6],"balance":resp[0][7]},200)
                 
-                #Se Retorna El Mensaje
-                return self.message_return({"message":"invalid password"},404)
+                #Caso Contrario Se Retorna Contraseña Invalida
+                else:
+                    
+                    #Se Retorna El Mensaje
+                    return self.message_return({"message":"invalid password"},404)
 
-        #Caso Contrario Se Retorna Invalido
+            #Caso Contrario Se Retorna Invalido
+            else:
+
+                #Se Retorna El Mensaje
+                return self.message_return({"message":"invalid email"},404)
+        
+        #Si Esta Vacio Rol Indica Que La Cuenta No Existe
         else:
 
             #Se Retorna El Mensaje
@@ -353,41 +403,54 @@ class users_and_admins():
     #Devolver Datos Por Token Header
     def login_token_header(self,token_header):
 
-        #Conectar DB
-        self.conectar_db()
+        #Identificar Rol Con Token Header
+        rol = self.identify_rol_token_header(token_header)
 
-        #Se Realiza La Busqueda
-        self.db.execute(f"""
-            SELECT * FROM Usuario WHERE token_header = '{token_header}'
-        """)
+        #Si El Rol Existe Se Retornan Sus Datos
+        if rol:
 
-        #Se Almacenan Los Resultados De La Busqueda
-        resp = self.db.fetchall()
+            #Conectar DB
+            self.conectar_db()
 
-        #Desconectar De La DB
-        self.desconectar_DB()
-        
-        #De Existir Se Retornan Su Datos
-        if resp:
+            #Se Realiza La Busqueda
+            self.db.execute(f"""
+                SELECT * FROM {rol} WHERE token_header = '{token_header}'
+            """)
 
-            #Se Crea El Mensaje
-            message = self.message_return({"id":resp[0][0],"username":resp[0][1],"email":resp[0][3],"token_header":resp[0][4],"rol":resp[0][6],"balance":resp[0][7]},200)
+            #Se Almacenan Los Resultados De La Busqueda
+            resp = self.db.fetchall()
 
-            #Se Retorna El Mensaje
-            return message
-
-        #Caso Contrario Se Retorna Invalido
-        else:
+            #Desconectar De La DB
+            self.desconectar_DB()
             
+            #De Existir Se Retornan Su Datos
+            if resp:
+
+                #Se Crea El Mensaje
+                message = self.message_return({"id":resp[0][0],"username":resp[0][1],"email":resp[0][3],"token_header":resp[0][4],"rol":resp[0][6],"balance":resp[0][7]},200)
+
+                #Se Retorna El Mensaje
+                return message
+
+            #Caso Contrario Se Retorna Invalido
+            else:
+                
+                #Se Retorna El Mensaje
+                return self.message_return({"message":"invalid token"},401)
+        
+        #Caso Contrario No Existe Cuenta Con Ese Token
+        else:
+
             #Se Retorna El Mensaje
             return self.message_return({"message":"invalid token"},401)
-
 #Se Crea La Clase DB
 users_admins_db = users_and_admins()
 
 #Iniciar
 #print(users_admins_db.inicializar_db())
 
-#print(users_admins_db.balance_update(1,5,"Usuario"))
+#print(users_admins_db.balance_update("RYZVKNNUNNDXBNCUR6S3YTBHB2UKPRPDIZN2SZPPVXQUM5QAHS54DOAKICUYL4GC",5))
 
 #print(users_admins_db.login_email_pass("Test1@gmail.com","Keka4542"))
+
+#print(users_admins_db.identify_rol_token_header("RYZVKNNUNNDXBNCUR6S3YTBHB2UKPRPDIZN2SZPPVXQUM5QAHS54DOAKICUYL4GC"))
