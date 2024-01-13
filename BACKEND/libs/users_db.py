@@ -289,7 +289,7 @@ class users_db():
             if resp_2:
 
                 #Se Retorna El Mensaje
-                return self.message_return({"id":resp[0][0],"username":resp[0][1],"email":resp[0][2],"token_header":resp[0][3],"rol":resp[0][5],"balance":resp[0][6]},200)
+                return self.message_return({"id":resp[0][0],"username":resp[0][1],"email":resp[0][3],"token_header":resp[0][4],"rol":resp[0][6],"balance":resp[0][7]},200)
             
             #Caso Contrario Se Retorna Contraseña Invalida
             else:
