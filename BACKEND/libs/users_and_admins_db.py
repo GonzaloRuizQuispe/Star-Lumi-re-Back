@@ -82,6 +82,16 @@ class users_and_admins():
                 balance REAL NOT NULL
         )""")
 
+        #Crear Tabla Token_Header By Rol
+        self.db.execute("""
+            CREATE TABLE IF NOT EXISTS Data(
+                username VARCHAR(1024) NOT NULL,
+                email VARCHAR(1024) NOT NULL,
+                token_header VARCHAR(64) NOT NULL,
+                rol VARCHAR (50) NOT NULL 
+            )
+        """)
+
         #Desconectar DB
         self.desconectar_DB
 
@@ -153,6 +163,17 @@ class users_and_admins():
         else:
             return self.gen_token_acceso()
 
+    #Trigger Insert Data
+    def trigger_data(self,username,email,token_header,rol):
+
+        #Conectar DB
+        self.conectar_db()
+
+        #Agregar Datos
+        self.db.execute(f"""
+            INSERT INTO Data (username,email,token_header,rol) VALUES ('{username}','{email}','{token_header}','{rol}')
+        """)
+
     #Agregar Usuario
     def agregar_user(self, username, password, email, rol, codigo=None):
         
@@ -161,7 +182,7 @@ class users_and_admins():
 
         #Buscar Similitud En Los Datos
         self.db.execute(f"""
-            SELECT * FROM {rol} WHERE username='{username}' or email='{email}'
+            SELECT * FROM Data WHERE username='{username}' or email='{email}'
         """)
 
         #Se Guardan Los Valores
@@ -187,6 +208,9 @@ class users_and_admins():
                 #Finalizar Conexion
                 self.desconectar_DB()
 
+                #Trigger Data
+                self.trigger_data(username,email,token_header,rol)
+
                 #Se Retorna Un Mensaje Notificando
                 return self.message_return({"message":"user created"},201)
 
@@ -207,6 +231,9 @@ class users_and_admins():
 
                 #Finalizar Conexion
                 self.desconectar_DB()
+
+                #Trigger Data
+                self.trigger_data(username,email,token_header,rol)
 
                 #Se Retorna Un Mensaje Notificando
                 return self.message_return({"message":"user created"},201)
@@ -234,6 +261,26 @@ class users_and_admins():
 
                 #Se Retorna Un Mensaje Notificando
                 return self.message_return({"message" : "email en uso"},400)
+
+    #Identificar Rol Con Token Header
+    def identify_rol(self,token_header):
+        
+        #Conectar DB
+        self.conectar_db()
+
+        #Realizar Consulta
+        self.db.execute(f"""
+            SELECT * FROM Data WHERE token_header='{token_header}'
+        """)
+
+        #Guardar Respuesta
+        resp = self.db.fetchall()
+
+        #Desconectar DB
+        self.desconectar_DB()
+
+        #Retornar Mensaje Con El Rol
+        return resp[0][1]
 
     #Modificar Balance
     def balance_update(self,id_usuario,balance_update,rol):
@@ -339,8 +386,8 @@ class users_and_admins():
 users_admins_db = users_and_admins()
 
 #Iniciar
-#print(users.inicializar_db())
+#print(users_admins_db.inicializar_db())
 
-#print(users.balance_update(1,5,"Usuario"))
+#print(users_admins_db.balance_update(1,5,"Usuario"))
 
-#print(users.login_email_pass("Test1@gmail.com","Keka4542"))
+#print(users_admins_db.login_email_pass("Test1@gmail.com","Keka4542"))
