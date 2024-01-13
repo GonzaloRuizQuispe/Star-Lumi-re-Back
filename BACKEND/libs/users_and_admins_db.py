@@ -426,11 +426,8 @@ class users_and_admins():
             #De Existir Se Retornan Su Datos
             if resp:
 
-                #Se Crea El Mensaje
-                message = self.message_return({"id":resp[0][0],"username":resp[0][1],"email":resp[0][3],"token_header":resp[0][4],"rol":resp[0][6],"balance":resp[0][7]},200)
-
                 #Se Retorna El Mensaje
-                return message
+                return self.message_return({"id":resp[0][0],"username":resp[0][1],"email":resp[0][3],"token_header":resp[0][4],"rol":resp[0][6],"balance":resp[0][7]},200)
 
             #Caso Contrario Se Retorna Invalido
             else:
@@ -443,7 +440,7 @@ class users_and_admins():
 
             #Se Retorna El Mensaje
             return self.message_return({"message":"invalid token"},401)
-            
+
 #Se Crea La Clase DB
 users_admins_db = users_and_admins()
 
@@ -455,3 +452,5 @@ users_admins_db = users_and_admins()
 #print(users_admins_db.login_email_pass("Test1@gmail.com","Keka4542"))
 
 #print(users_admins_db.identify_rol_token_header("RYZVKNNUNNDXBNCUR6S3YTBHB2UKPRPDIZN2SZPPVXQUM5QAHS54DOAKICUYL4GC"))
+
+#print(users_admins_db.login_token_header("GW3T2GBNAVPMT2AX26TYFJZPQCQTT4JTEPODDKK5X77INMWU576WA5ORYNZN3CMJ"))
