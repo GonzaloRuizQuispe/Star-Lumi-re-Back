@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import os
 import pymysql
 
-class users_db():
+class users_and_admins():
 
     #Variables Recursiva
     conexion = None
@@ -336,7 +336,7 @@ class users_db():
             return self.message_return({"message":"invalid token"},401)
 
 #Se Crea La Clase DB
-users = users_db()
+users_admins_db = users_and_admins()
 
 #Iniciar
 #print(users.inicializar_db())
