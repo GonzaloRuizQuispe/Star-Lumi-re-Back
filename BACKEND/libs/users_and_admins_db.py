@@ -129,7 +129,7 @@ class users_and_admins():
         #No Requiere De Conectarse Ya Que Se Usa Dentro De Otra Funcion
         #Se Consulta En La DB La Tabla De "Data" Si Existe Algun Token Similar
         self.db.execute(f"""
-            SELECT * FROM Usuario WHERE token_header = '{token}'
+            SELECT * FROM Data WHERE token_header = '{token}'
         """)
 
         #Se Guarda La Respuesta
@@ -151,7 +151,7 @@ class users_and_admins():
         #No Requiere De Conectarse Ya Que Se Usa Dentro De Otra Funcion
         #Se Consulta En La DB La Tabla De "Data" Si Existe Algun Token Similar
         self.db.execute(f"""
-            SELECT * FROM Usuario WHERE token_acceso = '{token}'
+            SELECT * FROM Data WHERE token_acceso = '{token}'
         """)
 
         #Se Guarda La Respuesta

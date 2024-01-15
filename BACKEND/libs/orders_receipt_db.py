@@ -68,14 +68,14 @@ class orders_receipt_db():
             CREATE TABLE IF NOT EXISTS C_Service(
                 id INTEGER PRIMARY KEY AUTO_INCREMENT,
                 id_c_plataform INTEGER NOT NULL,
-                name VARCHAR(255) NOT NULL,
-                FOREIGN KEY (id_c_plataform) REFERENCES C_Plataform(id)
+                name VARCHAR(255) NOT NULL
         )""")
 
         #Crear Tabla Servicios Si Es Que No Existe
         self.db.execute("""
             CREATE TABLE IF NOT EXISTS Service(
                 id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                id_original INTEGER NOT NULL,
                 id_c_service INTEGER NOT NULL,
                 name VARCHAR(255) NOT NULL,
                 description VARCHAR(255),
@@ -83,8 +83,7 @@ class orders_receipt_db():
                 min VARCHAR(50),
                 max VARCHAR(50),
                 rate_o VARCHAR(50),
-                rate_r VARCHAR(50),
-                FOREIGN KEY (id_c_service) REFERENCES C_Service(id)
+                rate_r VARCHAR(50)
         )""")
 
         #Crear Tabla De Ordenes (Recibos)
@@ -94,16 +93,11 @@ class orders_receipt_db():
                 id_original INTEGER NOT NULL,
                 id_user INTEGER NOT NULL,
                 date DATETIME NOT NULL,
-                link VARCHAR(999999) NOT NULL,
+                link VARCHAR(4096) NOT NULL,
                 charge REAL NOT NULL,
                 quantity INTEGER NOT NULL,
-                id_service INTEGER NOT NULL,
-                FOREIGN KEY (id_service) REFERENCES Service(id),
-                FOREIGN KEY (id_user) REFERENCES Data(id)
+                id_service INTEGER NOT NULL
         )""")
-
-        #Actualizar La DB
-        self.actualizar_DB()
 
         #Finalizar Conexion Con La DB
         self.desconectar_DB()
@@ -130,9 +124,6 @@ class orders_receipt_db():
             
             #De No Existir Se Agrega A La DB
             self.db.execute(f" INSERT INTO C_Plataform (name) VALUES ('{name}') ")
-
-            #Se Actualiza La DB
-            self.actualizar_DB()
 
             #Se Desconecta De La DB
             self.desconectar_DB()
@@ -308,4 +299,6 @@ class orders_receipt_db():
 #Se Crea La Clase De Ordenes Y Recibos
 orders_and_receipt = orders_receipt_db()
 
-print(orders_and_receipt.inicializar_db())
+#print(orders_and_receipt.inicializar_db())
+
+#print(orders_and_receipt.add_category_plataform("INSTAGRAM"))

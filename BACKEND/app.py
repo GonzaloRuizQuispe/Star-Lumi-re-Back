@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask_cors import CORS
 from libs.users_and_admins_db import users_admins_db
-#from libs.orders_receipt_db import orders_and_receipt
+from libs.orders_receipt_db import orders_and_receipt
 #from libs.star_lumire import api_star_lumiere
 import datetime
 
@@ -112,8 +112,8 @@ def verify():
         #Se Retorna Error De Procesamiento Para La Web
         return users_admins_db.message_return({"message":"server internal error"},500)
 
-""" #API Category 1 (Mostrar O Agregar Categorias De Plataformas)
-@app.route('/category_plataform',methods=['GET','POST'])
+#API Category 1 (Mostrar O Agregar Categorias De Plataformas)
+@app.route('/category_plataform',methods=['POST'])
 def category_plataform():
     try:
         
@@ -146,6 +146,7 @@ def category_plataform():
         #Se Retorna Error De Procesamiento Para La Web
         return users_admins_db.message_return({"message":"server internal error"},500)
 
+""" 
 #API Category 2 (Mostrar O Agregar Categorias De Servicios)
 @app.route('/category_service',methods=['GET','POST'])
 def category_service():
