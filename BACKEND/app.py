@@ -116,21 +116,11 @@ def verify():
 @app.route('/category_plataform',methods=['POST'])
 def category_plataform():
     try:
-        
-        #Si El Metodo Es GET Se Retornan Todas Las Categorias
-        if request.method == 'GET':
-            
-            #Se Retornan Las Categorias Sin Necesidad De Datos
-            return (orders_and_receipt.view_category_plataform())
-        
-        #Si El Metodo Es POST Se Procede A Agregar Una Categoria De Plataforma
-        if request.method == 'POST':
-            
-            #Se Recolectan El Archivo JSON
-            data = request.json
+        #Se Recolectan El Archivo JSON
+        data = request.json
 
-            #Se Agrega La Categoria Plataforma A La DB Y Se Retorna El Mensaje
-            return orders_and_receipt.add_category_plataform(data['name'])
+        #Se Agrega La Categoria Plataforma A La DB Y Se Retorna El Mensaje
+        return orders_and_receipt.add_category_plataform(data['name'])
 
     except Exception as e:
 

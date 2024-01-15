@@ -2,7 +2,7 @@ import sqlite3
 from flask import make_response
 from dotenv import load_dotenv
 import os
-import MySQLdb
+import pymysql
 
 class orders_receipt_db():
 
