@@ -157,9 +157,6 @@ class orders_receipt_db():
             #De No Existir Se Agrega A La DB
             self.db.execute(f" INSERT INTO C_Service (name,id_c_plataform) VALUES ('{name}','{id_c_plataform}') ")
 
-            #Se Actualiza La DB
-            self.actualizar_DB()
-
             #Se Desconecta De La DB
             self.desconectar_DB()
 
@@ -173,7 +170,7 @@ class orders_receipt_db():
             return self.message_return({"message":f"category service already exists ID : {resp[0][0]}"},400)
 
     #Agregar Servicios
-    def add_service(self,id_c_service,name,description,type,min,max,rate_o):
+    def add_service(self,id_original,id_c_service,name,description,type,min,max,rate_o):
         
         #Se Conecta A La DB
         self.conectar_db()
@@ -191,11 +188,8 @@ class orders_receipt_db():
 
             #De No Existir Se Agrega A La DB
             self.db.execute(f"""
-                INSERT INTO Service (id_c_service,name,description,type,min,max,rate_o,rate_r) VALUES ('{id_c_service}','{name}','{description}','{type}','{min}','{max}','{rate_o}','{rate_r})'
+                INSERT INTO Service (id_original,id_c_service,name,description,type,min,max,rate_o,rate_r) VALUES ('{id_original}','{id_c_service}','{name}','{description}','{type}','{min}','{max}','{rate_o}','{rate_r})'
             """)
-
-            #Se Actualiza La DB
-            self.actualizar_DB()
 
             #Se Desconecta De La DB
             self.desconectar_DB()
