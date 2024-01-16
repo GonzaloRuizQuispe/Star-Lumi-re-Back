@@ -211,7 +211,7 @@ class users_and_admins():
                 self.desconectar_DB()
 
                 #Trigger Data
-                self.trigger_data(username,password,email,token_header,rol)
+                self.trigger_data(username,password,email,token_header,token_acceso,rol)
 
                 #Se Retorna Un Mensaje Notificando
                 return self.message_return({"message":"user created"},201)
@@ -235,7 +235,7 @@ class users_and_admins():
                 self.desconectar_DB()
 
                 #Trigger Data
-                self.trigger_data(username,password,email,token_header,rol)
+                self.trigger_data(username,password,email,token_header,token_acceso,rol)
 
                 #Se Retorna Un Mensaje Notificando
                 return self.message_return({"message":"user created"},201)
