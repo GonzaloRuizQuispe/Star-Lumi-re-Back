@@ -35,7 +35,6 @@ class orders_receipt_db():
             passwd=os.getenv("DATABASE_PASSWORD"),
             db=os.getenv("DATABASE"),
             autocommit=True,
-            ssl_mode="VERIFY_IDENTITY",
             ssl={ "rejecUnauthorized": False }
         )
 
