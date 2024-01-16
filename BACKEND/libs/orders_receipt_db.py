@@ -292,6 +292,6 @@ class orders_receipt_db():
 #Se Crea La Clase De Ordenes Y Recibos
 orders_and_receipt = orders_receipt_db()
 
-#print(orders_and_receipt.inicializar_db())
+print(orders_and_receipt.inicializar_db())
 
 #print(orders_and_receipt.add_category_plataform("INSTAGRAM"))

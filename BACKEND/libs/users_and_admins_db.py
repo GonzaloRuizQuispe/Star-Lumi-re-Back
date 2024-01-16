@@ -89,6 +89,7 @@ class users_and_admins():
                 password VARCHAR(1024) NOT NULL,
                 email VARCHAR(1024) NOT NULL,
                 token_header VARCHAR(64) NOT NULL,
+                token_acceso VARCHAR(32) NOT NULL,
                 rol VARCHAR (50) NOT NULL 
             )
         """)
@@ -165,14 +166,14 @@ class users_and_admins():
             return self.gen_token_acceso()
 
     #Trigger Insert Data
-    def trigger_data(self,username,password,email,token_header,rol):
+    def trigger_data(self,username,password,email,token_header,token_acceso,rol):
 
         #Conectar DB
         self.conectar_db()
 
         #Agregar Datos
         self.db.execute(f"""
-            INSERT INTO Data (username,password,email,token_header,rol) VALUES ('{username}','{password}','{email}','{token_header}','{rol}')
+            INSERT INTO Data (username,password,email,token_header,token_acceso,rol) VALUES ('{username}','{password}','{email}','{token_header}','{token_acceso}','{rol}')
         """)
 
     #Agregar Usuario
@@ -288,7 +289,7 @@ class users_and_admins():
         #Caso Contrario Se Retorna El Rol
         else:
             #Retornar Mensaje Con El Rol
-            return resp[0][4]
+            return resp[0][5]
 
     #Identificar Rol Con Email, Password
     def identify_rol_email_password(self,email,password):
@@ -316,7 +317,7 @@ class users_and_admins():
         else:
 
             #Retornar Mensaje Con El Rol
-            return resp[0][4]
+            return resp[0][5]
 
     #Modificar Balance
     def balance_update(self,token_header,balance_update):
@@ -445,7 +446,7 @@ class users_and_admins():
 users_admins_db = users_and_admins()
 
 #Iniciar
-#print(users_admins_db.inicializar_db())
+print(users_admins_db.inicializar_db())
 
 #print(users_admins_db.balance_update("RYZVKNNUNNDXBNCUR6S3YTBHB2UKPRPDIZN2SZPPVXQUM5QAHS54DOAKICUYL4GC",5))
 
