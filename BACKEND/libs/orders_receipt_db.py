@@ -1,4 +1,3 @@
-import sqlite3
 from flask import make_response
 from dotenv import load_dotenv
 import os
@@ -29,7 +28,7 @@ class orders_receipt_db():
         load_dotenv()
 
         #Crear Conexion
-        self.conexion = MySQLdb.connect(
+        self.conexion = pymysql.connect(
             #Host, Username, Password, Name DB, AutoCommit, AUTH.
             host=os.getenv("DATABASE_HOST"),
             user=os.getenv("DATABASE_USERNAME"),
