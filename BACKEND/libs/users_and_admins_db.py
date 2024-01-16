@@ -6,10 +6,13 @@ import pymysql
 
 class users_and_admins():
 
+    #Cargar Datos De .env
+    load_dotenv()
+
     #Variables Recursiva
     conexion = None
     db = None
-    codigo = "B5YY3Q3HOXTK6XCW3SYJIEEVKFM2J3P3"
+    codigo = os.getenv("OTP")
 
     #Retorno De Mensajes
     def message_return(self,text,status_code):
@@ -25,9 +28,6 @@ class users_and_admins():
 
     #Conectarse A La DB
     def conectar_db(self):
-
-        #Cargar Datos De .env
-        load_dotenv()
 
         #Crear Conexion
         self.conexion = pymysql.connect(
