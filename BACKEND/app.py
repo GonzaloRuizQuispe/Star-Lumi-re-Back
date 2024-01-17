@@ -28,13 +28,20 @@ def register():
 
         #Identificar Si Es Administrador
         if data['rol'] == "Administrador":
+
             #Se Utiliza La Funcion De Agregar A Database Con Codigo (Administrador)
             result = users_admins_db.agregar_user(data['username'],data['password'],data['email'],data['rol'],data['code'])
 
         #Si No Es Administrador Se Agrega Normalmente
-        else:
+        elif data['rol'] == "Usuario":
+
             #Se Utiliza La Funcion De Agregar A Database
             result = users_admins_db.agregar_user(data['username'],data['password'],data['email'],data['rol'])
+
+        else:
+            
+            #Se Crea Un Error
+            result = users_admins_db.message_return({"message":"error in json format"})
 
         #Se Retorna El Resultado De La Funcion De La DB
         return (result)
@@ -113,7 +120,7 @@ def verify():
         return users_admins_db.message_return({"message":"server internal error"},500)
 
 #API Category 1 (Mostrar O Agregar Categorias De Plataformas)
-@app.route('/category_plataform',methods=['POST'])
+@app.route('/category_plataforms',methods=['POST'])
 def category_plataform():
     try:
         #Se Recolectan El Archivo JSON
@@ -134,11 +141,10 @@ def category_plataform():
         with open('errores.txt', 'a') as archivo: archivo.write(mensaje_error)
         
         #Se Retorna Error De Procesamiento Para La Web
-        return users_admins_db.message_return({"message":"server internal error"},500)
+        return orders_and_receipt.message_return({"message":"server internal error"},500)
 
-""" 
 #API Category 2 (Mostrar O Agregar Categorias De Servicios)
-@app.route('/category_service',methods=['GET','POST'])
+@app.route('/category_services',methods=['GET','POST'])
 def category_service():
     try:
         
@@ -172,10 +178,10 @@ def category_service():
         with open('errores.txt', 'a') as archivo: archivo.write(mensaje_error)
         
         #Se Retorna Error De Procesamiento Para La Web
-        return users_admins_db.message_return({"message":"server internal error"},500)
+        return orders_and_receipt.message_return({"message":"server internal error"},500)
 
 #API Services (Mostrar Servicios)
-@app.route('/service',methods=['GET','POST'])
+@app.route('/services',methods=['GET','POST'])
 def service():
     try:
         
@@ -206,8 +212,7 @@ def service():
         with open('errores.txt', 'a') as archivo: archivo.write(mensaje_error)
         
         #Se Retorna Error De Procesamiento Para La Web
-        return users.message_return({"message":"server internal error"},500)
- """
+        return orders_and_receipt.message_return({"message":"server internal error"},500)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000, threaded=True)
