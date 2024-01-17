@@ -286,11 +286,11 @@ class orders_receipt_db():
             data.append({"id":f"{id}","id_c_service":f"{id_c_services}","name":f"{name}","description":f"{description}","type":f"{type}","min":f"{min}","max":f"{max}","rate":f"{rate_r}"})
 
         #Se Retorna El Mensaje Con Su Status
-        return self.message_return(data,200)
+        return self.message_return(resp,200)
 
 #Se Crea La Clase De Ordenes Y Recibos
 orders_and_receipt = orders_receipt_db()
 
 print(orders_and_receipt.inicializar_db())
 
-#print(orders_and_receipt.add_category_plataform("INSTAGRAM"))
+#print(orders_and_receipt.add_category_plataform("TIKTOK"))
