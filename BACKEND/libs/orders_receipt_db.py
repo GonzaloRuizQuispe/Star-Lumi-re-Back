@@ -103,38 +103,40 @@ class orders_receipt_db():
         #Retorna Que Se Inicializo Bien La DB
         return "DB Orders And Receipt Inicializado Correctamente"
 
-    #Agregar Categoria De Plataforma
-    def add_category_plataform(self,name):
+    #Agregar Servicios
+    def add_service(self,id_original,id_c_service,name,description,type,min,max,rate_o):
         
         #Se Conecta A La DB
         self.conectar_db()
 
-        #Se Realiza El Comando
+        #Se Realiza La Consulta En La DB
         self.db.execute(f"""
-            SELECT * FROM C_Plataform WHERE name='{name}'
+            SELECT * FROM Service WHERE name='{name}'
         """)
 
-        #Se Guarda El Resultado
+        #Se Guardan Las Respuestas
         resp = self.db.fetchall()
 
-        #Se Verifica Que No Exista La Categoria En La DB
+        #Se Verifica Que No Exista El Servicio
         if not resp:
-            
+
             #De No Existir Se Agrega A La DB
-            self.db.execute(f" INSERT INTO C_Plataform (name) VALUES ('{name}') ")
+            self.db.execute(f"""
+                INSERT INTO Service (id_original,id_c_service,name,description,type,min,max,rate_o,rate_r) VALUES ('{id_original}','{id_c_service}','{name}','{description}','{type}','{min}','{max}','{rate_o}','{rate_o*10})'
+            """)
 
             #Se Desconecta De La DB
             self.desconectar_DB()
 
             #Se Retorna Un Mensaje Notificando
-            return self.message_return({"message":"category plataform created"},201)
+            return self.message_return({"message":"service created"},201)
 
-        #Caso Contrario Se Retorna Que Existe La Categoria Con ID
+        #Caso Contrario Se Notifica Que Ya Existe
         else:
 
             #Se Retorna Un Mensaje Notificando
-            return self.message_return({"message":f"category already exists ID : {resp[0][0]}"},400)
-
+            return self.message_return({"message":f"service already exists ID : {resp[0][0]}"},400)
+    
     #Agregar Categoria De Servicio
     def add_category_service(self,name,id_c_plataform):
         
@@ -167,39 +169,37 @@ class orders_receipt_db():
             #Se Retorna Un Mensaje Notificando
             return self.message_return({"message":f"category service already exists ID : {resp[0][0]}"},400)
 
-    #Agregar Servicios
-    def add_service(self,id_original,id_c_service,name,description,type,min,max,rate_o):
+    #Agregar Categoria De Plataforma
+    def add_category_plataform(self,name):
         
         #Se Conecta A La DB
         self.conectar_db()
 
-        #Se Realiza La Consulta En La DB
+        #Se Realiza El Comando
         self.db.execute(f"""
-            SELECT * FROM Service WHERE name='{name}'
+            SELECT * FROM C_Plataform WHERE name='{name}'
         """)
 
-        #Se Guardan Las Respuestas
+        #Se Guarda El Resultado
         resp = self.db.fetchall()
 
-        #Se Verifica Que No Exista El Servicio
+        #Se Verifica Que No Exista La Categoria En La DB
         if not resp:
-
+            
             #De No Existir Se Agrega A La DB
-            self.db.execute(f"""
-                INSERT INTO Service (id_original,id_c_service,name,description,type,min,max,rate_o,rate_r) VALUES ('{id_original}','{id_c_service}','{name}','{description}','{type}','{min}','{max}','{rate_o}','{rate_r})'
-            """)
+            self.db.execute(f" INSERT INTO C_Plataform (name) VALUES ('{name}') ")
 
             #Se Desconecta De La DB
             self.desconectar_DB()
 
             #Se Retorna Un Mensaje Notificando
-            return self.message_return({"message":"service created"},201)
+            return self.message_return({"message":"category plataform created"},201)
 
-        #Caso Contrario Se Notifica Que Ya Existe
+        #Caso Contrario Se Retorna Que Existe La Categoria Con ID
         else:
 
             #Se Retorna Un Mensaje Notificando
-            return self.message_return({"message":f"service already exists ID : {resp[0][0]}"},400)
+            return self.message_return({"message":f"category already exists ID : {resp[0][0]}"},400)
 
     #Devolver Datos De Categoria De Plataforma
     def view_category_plataform(self):
@@ -228,7 +228,7 @@ class orders_receipt_db():
             data.append({"id":id,"name":f"{name}"})
 
         #Se Retorna El Mensaje Con Su Status
-        return self.message_return(resp,200)
+        return self.message_return(data,200)
 
     #Devolver Datos De Categoria De Servicio
     def view_category_service(self,id_c_plataform):
@@ -276,12 +276,21 @@ class orders_receipt_db():
         #Desconectamos De La DB
         self.desconectar_DB()
 
-        #Se Retorna El Mensaje Con La Lista
-        return self.message_return(resp,200)
+        #Creamos Una Variable Recursiva
+        data = []
+
+        #Se Crea El JSON
+        for id, id_c_services, name, description, type, min, max, rate_o, rate_r in resp:
+
+            #Se Agrega A La Lista
+            data.append({"id":f"{id}","id_c_service":f"{id_c_services}","name":f"{name}","description":f"{description}","type":f"{type}","min":f"{min}","max":f"{max}","rate":f"{rate_r}"})
+
+        #Se Retorna El Mensaje Con Su Status
+        return self.message_return(data,200)
 
 #Se Crea La Clase De Ordenes Y Recibos
 orders_and_receipt = orders_receipt_db()
 
-print(orders_and_receipt.inicializar_db())
+#print(orders_and_receipt.inicializar_db())
 
-#print(orders_and_receipt.add_category_plataform("TIKTOK"))
+#print(orders_and_receipt.add_category_plataform("INSTAGRAM"))

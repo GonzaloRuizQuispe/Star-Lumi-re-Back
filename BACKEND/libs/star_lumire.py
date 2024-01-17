@@ -16,9 +16,43 @@ class star_lumiere():
     #En Cabezado Para Evitar Errores
     headers = {'User-Agent':'Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)'}
 
+    #Servicios Filtrados Por Categoria
+    def view_category(self,category):
+
+        #Se Llena La Accion A Realizar
+        data = {'key':self.API_KEY, 'action':'services'}
+
+        #Se Hace La Consulta
+        resp = requests.post(self.API_URL,data=data).json()
+
+        #Se Filtra Segun La Categoria Deseada
+        filtered_data = [item for item in resp if item['category'] == category]
+
+        #Se Retorna El Mensaje
+        return filtered_data
+
+    def view_service(self):
+
+        #Se Llena La Accion A Realizar
+        data = {'key':self.API_KEY, 'action':'services'}
+
+        #Se Hace La Consulta
+        resp = requests.post(self.API_URL,data=data).json()
+
+        return resp
+
     def user_balance(self):
         data = {'key':self.API_KEY, 'action':'balance'}
-        resp = requests.post(self.API_URL,data=data)
-        return resp.json()
+        resp = requests.post(self.API_URL,data=data).json()
+        return resp
 
 api_star_lumiere = star_lumiere()
+
+#print(api_star_lumiere.user_balance())
+
+resp = (api_star_lumiere.view_category("New 🔥 | Instagram Services"))
+
+#print(api_star_lumiere.view_service()[0])
+
+for x in resp:
+    print(f"{x['type']}\n\n")
