@@ -228,7 +228,7 @@ class orders_receipt_db():
             data.append({"id":id,"name":f"{name}"})
 
         #Se Retorna El Mensaje Con Su Status
-        return self.message_return(data,200)
+        return self.message_return(resp,200)
 
     #Devolver Datos De Categoria De Servicio
     def view_category_service(self,id_c_plataform):
@@ -276,16 +276,7 @@ class orders_receipt_db():
         #Desconectamos De La DB
         self.desconectar_DB()
 
-        #Creamos Una Variable Recursiva
-        data = []
-
-        #Se Crea El JSON
-        for id, id_c_services, name, description, type, min, max, rate_o, rate_r in resp:
-
-            #Se Agrega A La Lista
-            data.append({"id":f"{id}","id_c_service":f"{id_c_services}","name":f"{name}","description":f"{description}","type":f"{type}","min":f"{min}","max":f"{max}","rate":f"{rate_r}"})
-
-        #Se Retorna El Mensaje Con Su Status
+        #Se Retorna El Mensaje Con La Lista
         return self.message_return(resp,200)
 
 #Se Crea La Clase De Ordenes Y Recibos
