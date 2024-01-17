@@ -123,11 +123,9 @@ def verify():
 @app.route('/category_plataforms',methods=['POST'])
 def category_plataform():
     try:
-        #Se Recolectan El Archivo JSON
-        data = request.json
 
         #Se Agrega La Categoria Plataforma A La DB Y Se Retorna El Mensaje
-        return orders_and_receipt.add_category_plataform(data['name'])
+        return orders_and_receipt.view_category_plataform()
 
     except Exception as e:
 
@@ -144,27 +142,13 @@ def category_plataform():
         return orders_and_receipt.message_return({"message":"server internal error"},500)
 
 #API Category 2 (Mostrar O Agregar Categorias De Servicios)
-@app.route('/category_services',methods=['GET','POST'])
+@app.route('/category_services',methods=['POST'])
 def category_service():
     try:
-        
-        #Si El Metodo Es GET Se Retornan Todas Las Categorias
-        if request.method == 'GET':
-            
-            #Se Retornan Las Categorias Sin Necesidad De Datos
-            return (orders_and_receipt.view_category_service())
-        
-        #Si El Metodo Es POST Se Procede A Agregar Una Categoria De Plataforma
-        if request.method == 'POST':
-            
-            #Se Recolectan El Archivo JSON
-            data = request.json
 
-            #Se Agrega La Categoria Plataforma A La DB
-            result = orders_and_receipt.add_category_service(data['name'],data['id_c_plataform'])
+        data = request.json
 
-            #Se Retorna El Mensaje
-            return (result)
+        return (orders_and_receipt.view_category_service(data['name']))
 
     except Exception as e:
 
@@ -181,25 +165,13 @@ def category_service():
         return orders_and_receipt.message_return({"message":"server internal error"},500)
 
 #API Services (Mostrar Servicios)
-@app.route('/services',methods=['GET','POST'])
+@app.route('/services',methods=['POST'])
 def service():
     try:
         
-        #Si El Metodo Es GET Se Retornan Todas Las Categorias
-        if request.method == 'GET':
-            
-            #Se Retornan Las Categorias Sin Necesidad De Datos
-            return (orders_and_receipt.view_services(data['id_c_service']))
-        
-        #Si El Metodo Es POST Se Procede A Agregar Una Categoria De Plataforma
-        if request.method == 'POST':
-            
-            #Se Recolectan El Archivo JSON
-            data = request.json
-            
-            #Se Agrega La Categoria Plataforma A La DB Y Se Retorna El Mensaje
-            return orders_and_receipt.add_service(data['id_c_service'],data['name'],data['description'],data['type'],data['min'],data['max'],data['rate_o'])
+        data = request.json
 
+        return orders_and_receipt.view_services(data['name'])
     except Exception as e:
 
         #Se Extrae La Fecha Actual
