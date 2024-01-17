@@ -278,12 +278,12 @@ class orders_receipt_db():
 
         #Creamos Una Variable Recursiva
         data = []
-
+        print(resp[0])
         #Se Crea El JSON
-        for id, id_c_services, name, description, type, min, max, rate_o, rate_r in resp:
-
+        for id, id_original, id_c_service, name, description, type, min, max, rate_o, rate_r in resp:
+            
             #Se Agrega A La Lista
-            data.append({"id":f"{id}","id_c_service":f"{id_c_services}","name":f"{name}","description":f"{description}","type":f"{type}","min":f"{min}","max":f"{max}","rate":f"{rate_r}"})
+            data.append({"id":f"{id}","id_original":f"{id_original}","id_c_service":f"{id_c_service}","name":f"{name}","description":f"{description}","type":f"{type}","min":f"{min}","max":f"{max}","rate":f"{rate_r}"})
 
         #Se Retorna El Mensaje Con Su Status
         return self.message_return(data,200)
