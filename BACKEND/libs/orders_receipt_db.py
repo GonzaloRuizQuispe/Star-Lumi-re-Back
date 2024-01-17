@@ -294,3 +294,5 @@ orders_and_receipt = orders_receipt_db()
 #print(orders_and_receipt.inicializar_db())
 
 #print(orders_and_receipt.add_category_plataform("INSTAGRAM"))
+
+#print(orders_and_receipt.add_category_service('New 🔥 | Instagram Services',"1"))

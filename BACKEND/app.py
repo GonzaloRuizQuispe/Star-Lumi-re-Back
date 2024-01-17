@@ -124,7 +124,7 @@ def verify():
 def category_plataform():
     try:
 
-        #Se Agrega La Categoria Plataforma A La DB Y Se Retorna El Mensaje
+        #Se Retornan Las Categoryas Plataform Disponibles
         return orders_and_receipt.view_category_plataform()
 
     except Exception as e:
@@ -146,9 +146,11 @@ def category_plataform():
 def category_service():
     try:
 
+        #Se Recolecta El JSON
         data = request.json
 
-        return (orders_and_receipt.view_category_service(data['name']))
+        #Se Retornan Las Categorias Pertenecientes A La Plataforma
+        return (orders_and_receipt.view_category_service(data['id_c_plataform']))
 
     except Exception as e:
 
@@ -172,6 +174,7 @@ def service():
         data = request.json
 
         return orders_and_receipt.view_services(data['name'])
+
     except Exception as e:
 
         #Se Extrae La Fecha Actual
