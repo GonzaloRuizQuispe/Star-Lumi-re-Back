@@ -1,6 +1,7 @@
 import requests
 from dotenv import load_dotenv
 import os
+from orders_receipt_db import orders_and_receipt
 
 class star_lumiere():
 
@@ -50,9 +51,8 @@ api_star_lumiere = star_lumiere()
 
 #print(api_star_lumiere.user_balance())
 
-resp = (api_star_lumiere.view_category("New 🔥 | Instagram Services"))
+#resp = (api_star_lumiere.view_category("New 🔥 | Instagram Services")[0])
 
 #print(api_star_lumiere.view_service()[0])
 
-for x in resp:
-    print(f"{x['type']}\n\n")
+#orders_and_receipt.add_service(resp['service'],"1",resp['name'],"",resp['type'],resp['min'],resp['max'],resp['rate'])

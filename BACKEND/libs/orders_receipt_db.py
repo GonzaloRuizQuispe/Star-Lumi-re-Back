@@ -5,6 +5,9 @@ import pymysql
 
 class orders_receipt_db():
 
+    #Cargar Datos De .env
+    load_dotenv()
+
     #Variables Recursiva
     conexion = None
     db = None
@@ -23,9 +26,6 @@ class orders_receipt_db():
 
     #Conectarse A La DB
     def conectar_db(self):
-
-        #Cargar Datos De .env
-        load_dotenv()
 
         #Crear Conexion
         self.conexion = pymysql.connect(
@@ -122,7 +122,7 @@ class orders_receipt_db():
 
             #De No Existir Se Agrega A La DB
             self.db.execute(f"""
-                INSERT INTO Service (id_original,id_c_service,name,description,type,min,max,rate_o,rate_r) VALUES ('{id_original}','{id_c_service}','{name}','{description}','{type}','{min}','{max}','{rate_o}','{rate_o*10})'
+                INSERT INTO Service (id_original,id_c_service,name,description,type,min,max,rate_o,rate_r) VALUES ('{id_original}','{id_c_service}','{name}','{description}','{type}','{min}','{max}','{rate_o}','{float(rate_o)*10}')
             """)
 
             #Se Desconecta De La DB

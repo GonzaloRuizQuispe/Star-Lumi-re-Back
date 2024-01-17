@@ -173,7 +173,7 @@ def service():
         
         data = request.json
 
-        return orders_and_receipt.view_services(data['name'])
+        return orders_and_receipt.view_services(data['id_c_service'])
 
     except Exception as e:
 
