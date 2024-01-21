@@ -120,7 +120,7 @@ def verify():
         return users_admins_db.message_return({"message":"server internal error"},500)
 
 #API Category 1 (Mostrar O Agregar Categorias De Plataformas)
-@app.route('/category_plataforms',methods=['POST'])
+@app.route('/category_plataforms',methods=['GET'])
 def category_plataform():
     try:
 

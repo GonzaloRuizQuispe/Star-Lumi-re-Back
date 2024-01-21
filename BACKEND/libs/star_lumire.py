@@ -51,8 +51,8 @@ api_star_lumiere = star_lumiere()
 
 #print(api_star_lumiere.user_balance())
 
-#resp = (api_star_lumiere.view_category("New 🔥 | Instagram Services")[0])
+resp = (api_star_lumiere.view_category("New 🔥 | Instagram Services")[0])
 
 #print(api_star_lumiere.view_service()[0])
 
-#orders_and_receipt.add_service(resp['service'],"1",resp['name'],"",resp['type'],resp['min'],resp['max'],resp['rate'])
+orders_and_receipt.add_service(resp['service'],"1",resp['name'],"",resp['type'],resp['min'],resp['max'],resp['rate'])
