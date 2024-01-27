@@ -446,7 +446,7 @@ class users_and_admins():
 users_admins_db = users_and_admins()
 
 #Iniciar
-print(users_admins_db.inicializar_db())
+#print(users_admins_db.inicializar_db())
 
 #print(users_admins_db.balance_update("RYZVKNNUNNDXBNCUR6S3YTBHB2UKPRPDIZN2SZPPVXQUM5QAHS54DOAKICUYL4GC",5))
 
