@@ -51,8 +51,17 @@ api_star_lumiere = star_lumiere()
 
 #print(api_star_lumiere.user_balance())
 
-resp = (api_star_lumiere.view_category("New 🔥 | Instagram Services")[0])
+def llenar_db(n_c_s,id_c_plataform,id_c_service):
+    orders_and_receipt.add_category_service(n_c_s,id_c_plataform)
 
-#print(api_star_lumiere.view_service()[0])
+    resp_1 = (api_star_lumiere.view_category(n_c_s))
 
-orders_and_receipt.add_service(resp['service'],"1",resp['name'],"",resp['type'],resp['min'],resp['max'],resp['rate'])
+    print(len(resp_1))
+
+    for resp in resp_1:
+
+        orders_and_receipt.add_service(resp['service'],id_c_service,resp['name'],"",resp['type'],resp['min'],resp['max'],resp['rate'])
+
+    print("finish")
+
+llenar_db("Instagram | Followers - Refill 365 Days ♻️",1,5)

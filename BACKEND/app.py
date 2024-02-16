@@ -119,7 +119,7 @@ def verify():
         #Se Retorna Error De Procesamiento Para La Web
         return users_admins_db.message_return({"message":"server internal error"},500)
 
-#API Category 1 (Mostrar O Agregar Categorias De Plataformas)
+#API Category 1 (Mostrar)
 @app.route('/category_plataforms',methods=['GET'])
 def category_plataform():
     try:
@@ -141,7 +141,7 @@ def category_plataform():
         #Se Retorna Error De Procesamiento Para La Web
         return orders_and_receipt.message_return({"message":"server internal error"},500)
 
-#API Category 2 (Mostrar O Agregar Categorias De Servicios)
+#API Category 2 (Mostrar)
 @app.route('/category_services',methods=['POST'])
 def category_service():
     try:
@@ -182,6 +182,52 @@ def service():
         
         #Se Genera El Mensaje De Error
         mensaje_error = f'{fecha_actual} - Se ha producido un error en /service: {str(e)}\n'
+
+        #Se guarda En Un Archivo Llamado errores.txt
+        with open('errores.txt', 'a') as archivo: archivo.write(mensaje_error)
+        
+        #Se Retorna Error De Procesamiento Para La Web
+        return orders_and_receipt.message_return({"message":"server internal error"},500)
+
+#API Add Category Plataform
+@app.route('/add_category_plataform',methods=['POST'])
+def add_category_plataform():
+    try:
+        
+        data = request.json
+
+        return orders_and_receipt.add_category_plataform(data['name'])
+
+    except Exception as e:
+
+        #Se Extrae La Fecha Actual
+        fecha_actual = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Obtiene la fecha y hora actual
+        
+        #Se Genera El Mensaje De Error
+        mensaje_error = f'{fecha_actual} - Se ha producido un error en /add_category_plataform: {str(e)}\n'
+
+        #Se guarda En Un Archivo Llamado errores.txt
+        with open('errores.txt', 'a') as archivo: archivo.write(mensaje_error)
+        
+        #Se Retorna Error De Procesamiento Para La Web
+        return orders_and_receipt.message_return({"message":"server internal error"},500)
+
+#API Add Category Service
+@app.route('/add_category_service',methods=['POST'])
+def add_category_service():
+    try:
+        
+        data = request.json
+
+        return orders_and_receipt.add_category_service(data['name'],data['category_father'])
+
+    except Exception as e:
+
+        #Se Extrae La Fecha Actual
+        fecha_actual = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Obtiene la fecha y hora actual
+        
+        #Se Genera El Mensaje De Error
+        mensaje_error = f'{fecha_actual} - Se ha producido un error en /add_category_service: {str(e)}\n'
 
         #Se guarda En Un Archivo Llamado errores.txt
         with open('errores.txt', 'a') as archivo: archivo.write(mensaje_error)
