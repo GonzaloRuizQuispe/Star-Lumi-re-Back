@@ -338,7 +338,7 @@ class users_and_admins():
 
         #Se Modifica El Balance Del Usuario Mediante Su ID (Visible En WEB)
         self.db.execute(f"""
-            UPDATE {rol} SET balance='{float(resp[0][7])+float(balance_update)}' WHERE id='{int(id_usuario)}'
+            UPDATE {rol} SET balance='{float(resp[0][7])+float(balance_update)}' WHERE token_header='{token_header}'
         """)
 
         #Desconectar De La DB
