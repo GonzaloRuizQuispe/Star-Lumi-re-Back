@@ -138,7 +138,7 @@ class orders_receipt_db():
             return self.message_return({"message":f"service already exists ID : {resp[0][0]}"},400)
     
     #Agregar Categoria De Servicio
-    def add_category_service(self,name,category_father):
+    def add_category_service(self,name,id_c_plataform):
         
         #Se Conecta A La DB
         self.conectar_db()
@@ -153,17 +153,6 @@ class orders_receipt_db():
 
         #Se Verifica Que No Exista La Categoria En La DB
         if not resp:
-            
-            #Se Extrae El ID De La Categoria Padre
-            self.db.execute(f"""
-                SELECT * FROM C_Plataform WHERE name='{category_father}'
-            """)
-
-            #Se Guarda
-            resp_2 = self.db.fetchall()
-
-            #Se Almacena Para Su Posterior Uso
-            id_c_plataform = resp[0][0]
 
             #De No Existir Se Agrega A La DB
             self.db.execute(f" INSERT INTO C_Service (name,id_c_plataform) VALUES ('{name}','{id_c_plataform}') ")
@@ -304,6 +293,6 @@ orders_and_receipt = orders_receipt_db()
 
 #print(orders_and_receipt.inicializar_db())
 
-#print(orders_and_receipt.add_category_plataform("INSTAGRAM"))
+#print(orders_and_receipt.add_category_plataform("TIKTOK"))
 
 #print(orders_and_receipt.add_category_service('New 🔥 | Instagram Services',"1"))

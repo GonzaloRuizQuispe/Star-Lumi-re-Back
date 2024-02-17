@@ -2,7 +2,9 @@ from flask import Flask, request
 from flask_cors import CORS
 from libs.users_and_admins_db import users_admins_db
 from libs.orders_receipt_db import orders_and_receipt
+from libs.database import database
 #from libs.star_lumire import api_star_lumiere
+
 import datetime
 
 #Se Crea La Web App
@@ -55,8 +57,8 @@ def register():
         #Se Genera El Mensaje De Error
         mensaje_error = f'{fecha_actual} - Se ha producido un error en /register: {str(e)}\n'
 
-        #Se guarda En Un Archivo Llamado errores.txt
-        with open('errores.txt', 'a') as archivo: archivo.write(mensaje_error)
+        #Se guarda En Los Registros De La DB
+        database.save_logs(mensaje_error)
         
         #Se Retorna Error De Procesamiento Para La Web
         return users_admins_db.message_return({"message":"server internal error"},500)
@@ -85,8 +87,8 @@ def login():
         #Se Genera El Mensaje De Error
         mensaje_error = f'{fecha_actual} - Se ha producido un error en /login: {str(e)}\n'
 
-        #Se guarda En Un Archivo Llamado errores.txt
-        with open('errores.txt', 'a') as archivo: archivo.write(mensaje_error)
+        #Se guarda En Los Registros De La DB
+        database.save_logs(mensaje_error)
         
         #Se Retorna Error De Procesamiento Para La Web
         return users_admins_db.message_return({"message":"server internal error"},500)
@@ -113,8 +115,8 @@ def verify():
         #Se Genera El Mensaje De Error
         mensaje_error = f'{fecha_actual} - Se ha producido un error en /maintain: {str(e)}\n'
 
-        #Se guarda En Un Archivo Llamado errores.txt
-        with open('errores.txt', 'a') as archivo: archivo.write(mensaje_error)
+        #Se guarda En Los Registros De La DB
+        database.save_logs(mensaje_error)
         
         #Se Retorna Error De Procesamiento Para La Web
         return users_admins_db.message_return({"message":"server internal error"},500)
@@ -135,8 +137,8 @@ def category_plataform():
         #Se Genera El Mensaje De Error
         mensaje_error = f'{fecha_actual} - Se ha producido un error en /category_plataform: {str(e)}\n'
 
-        #Se guarda En Un Archivo Llamado errores.txt
-        with open('errores.txt', 'a') as archivo: archivo.write(mensaje_error)
+        #Se guarda En Los Registros De La DB
+        database.save_logs(mensaje_error)
         
         #Se Retorna Error De Procesamiento Para La Web
         return orders_and_receipt.message_return({"message":"server internal error"},500)
@@ -160,8 +162,8 @@ def category_service():
         #Se Genera El Mensaje De Error
         mensaje_error = f'{fecha_actual} - Se ha producido un error en /category_service: {str(e)}\n'
 
-        #Se guarda En Un Archivo Llamado errores.txt
-        with open('errores.txt', 'a') as archivo: archivo.write(mensaje_error)
+        #Se guarda En Los Registros De La DB
+        database.save_logs(mensaje_error)
         
         #Se Retorna Error De Procesamiento Para La Web
         return orders_and_receipt.message_return({"message":"server internal error"},500)
@@ -183,8 +185,8 @@ def service():
         #Se Genera El Mensaje De Error
         mensaje_error = f'{fecha_actual} - Se ha producido un error en /service: {str(e)}\n'
 
-        #Se guarda En Un Archivo Llamado errores.txt
-        with open('errores.txt', 'a') as archivo: archivo.write(mensaje_error)
+        #Se guarda En Los Registros De La DB
+        database.save_logs(mensaje_error)
         
         #Se Retorna Error De Procesamiento Para La Web
         return orders_and_receipt.message_return({"message":"server internal error"},500)
@@ -206,8 +208,8 @@ def add_category_plataform():
         #Se Genera El Mensaje De Error
         mensaje_error = f'{fecha_actual} - Se ha producido un error en /add_category_plataform: {str(e)}\n'
 
-        #Se guarda En Un Archivo Llamado errores.txt
-        with open('errores.txt', 'a') as archivo: archivo.write(mensaje_error)
+        #Se guarda En Los Registros De La DB
+        database.save_logs(mensaje_error)
         
         #Se Retorna Error De Procesamiento Para La Web
         return orders_and_receipt.message_return({"message":"server internal error"},500)
@@ -219,7 +221,7 @@ def add_category_service():
         
         data = request.json
 
-        return orders_and_receipt.add_category_service(data['name'],data['category_father'])
+        return orders_and_receipt.add_category_service(data['name'],data['id_c_plataform'])
 
     except Exception as e:
 
@@ -229,9 +231,57 @@ def add_category_service():
         #Se Genera El Mensaje De Error
         mensaje_error = f'{fecha_actual} - Se ha producido un error en /add_category_service: {str(e)}\n'
 
-        #Se guarda En Un Archivo Llamado errores.txt
-        with open('errores.txt', 'a') as archivo: archivo.write(mensaje_error)
+        #Se guarda En Los Registros De La DB
+        database.save_logs(mensaje_error)
         
+        #Se Retorna Error De Procesamiento Para La Web
+        return orders_and_receipt.message_return({"message":"server internal error"},500)
+
+#API Verify OTP DB
+@app.route('/to_acces',methods=['POST'])
+def to_acces():
+    try:
+        
+        data = request.json
+
+        return database.code_rol_validation(data['code'])
+
+    except Exception as e:
+
+        #Se Extrae La Fecha Actual
+        fecha_actual = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Obtiene la fecha y hora actual
+        
+        #Se Genera El Mensaje De Error
+        mensaje_error = f'{fecha_actual} - Se ha producido un error en /to_acces: {str(e)}\n'
+
+        #Se guarda En Los Registros De La DB
+        database.save_logs(mensaje_error)
+        
+        #Se Retorna Error De Procesamiento Para La Web
+        return orders_and_receipt.message_return({"message":"server internal error"},500)
+
+#API Consultas
+@app.route('/consult_db',methods=['POST'])
+def consult_db():
+    try:
+        
+        data = request.json
+
+        message = database.consult_db(data['consult'])
+
+        return message
+
+    except Exception as e:
+
+        #Se Extrae La Fecha Actual
+        fecha_actual = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Obtiene la fecha y hora actual
+        
+        #Se Genera El Mensaje De Error
+        mensaje_error = f'{fecha_actual} - Se ha producido un error en /consult_db: {str(e)}\n'
+        
+        #Se guarda En Los Registros De La DB
+        database.save_logs(mensaje_error)
+    
         #Se Retorna Error De Procesamiento Para La Web
         return orders_and_receipt.message_return({"message":"server internal error"},500)
 
