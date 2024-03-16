@@ -267,9 +267,7 @@ def consult_db():
         
         data = request.json
 
-        message = database.consult_db(data['consult'])
-
-        return message
+        return database.consult_db(data['consult'])
 
     except Exception as e:
 
@@ -285,5 +283,11 @@ def consult_db():
         #Se Retorna Error De Procesamiento Para La Web
         return orders_and_receipt.message_return({"message":"server internal error"},500)
 
+#API Payeer
+@app.route('/payeer_2043370817.txt')
+def payeer():
+    with open('payeer_2043370817.txt', 'r') as f:
+        contenido = f.read()
+    return contenido
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000, threaded=True)
