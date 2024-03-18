@@ -284,7 +284,7 @@ def consult_db():
         return orders_and_receipt.message_return({"message":"server internal error"},500)
 
 #API Payeer
-@app.route('/payeer')
+@app.route('/payeer',methods=['GET'])
 def payeer():
     with open('payeer_2043637184.txt', 'r') as f:
         contenido = f.read()
