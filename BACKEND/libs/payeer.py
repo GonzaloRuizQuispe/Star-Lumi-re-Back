@@ -1,33 +1,29 @@
-""" import hashlib
-import hmac
-import time
-import json
 import requests
 
-ts = int(round(time.time()*1000))
-method = 'account'
-req = json.dumps({
-    'ts': ts,
-})
-print(req)
+url ="https://payeer.com/merchant/"
 
-clave = b'PoolLive45427752'
-H = hmac.new(clave, digestmod=hashlib.sha256)
-method = str(method)
-req = str(req)
-H.update(method.encode('utf-8') + req.encode('utf-8'))
-sign = H.hexdigest()
-print(sign)
+shop = "12345"
+order_id = "1"
+amount = "100"
+curr = "USD"
+desc = "Pepe"
+sign = "9F86D081884C7D659A2FEAA0C55AD015A3BF4F1B2B0B822CD15D6C15B0F00A08"
+key = "Pool!Live45427752"
 
-headers = {
-    'Content-Type': 'application/json',
-    'API-ID': 'f26c52a9-858e-4375-81a7-649b969c16aa',
-    'API-SIGN': sign
+data = {
+    'm_shop':shop,
+    'm_orderid':order_id,
+    'm_amount':amount,
+    'm_curr':curr,
+    'm_desc':desc,
+    'm_sign':sign,
+    'form[ps]':2609,
+    'form[curr[psId]]':'USD',
+    'm_params':2,
+    'm_cipher_method':'AES-256-CBC-IV',
+    'm_key':key,
 }
 
-request = requests.post('https://payeer.com/api/trade/' + method, data=req, headers=headers)
+resp = requests.post(url=url,data=data)
 
-response_body = request.text
-print(response_body) """
-
-
+print(resp.url)
