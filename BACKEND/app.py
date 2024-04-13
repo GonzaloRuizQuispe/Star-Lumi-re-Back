@@ -22,104 +22,48 @@ def home():
 @app.route('/register',methods=['POST'])
 def register():
 
-    #Se Usa Try Except Para Evadir Errores
-    """ try: """
+    try:
+        data = request.json # Se Recolecta El Archivo JSON
 
-    #Se Recolecta El Archivo JSON
-    data = request.json
+        result = usuarios_api.crear_usuario(data['username'],data['password'],data['email']) # Se Envian Los Datos Para Su Registro
 
-    #Identificar Si Es Administrador
-    if data['rol'] == "Administrador":
+        return result
 
-        #Se Utiliza La Funcion De Agregar A Database Con Codigo (Administrador)
-        result = usuarios_api.crear_usuario(data['username'],data['password'],data['email'])
+    except Exception as e: # Si Rompe De Alguna Forma Se Guarda El Porque
+        database_api.logs("{}".format(e),"Automatic - /Register")
 
-    #Si No Es Administrador Se Agrega Normalmente
-    elif data['rol'] == "Usuario":
-
-        #Se Utiliza La Funcion De Agregar A Database
-        result = usuarios_api.crear_usuario(data['username'],data['password'],data['email'])
-
-    else:
-            
-        #Se Crea Un Error
-        result = database_api.message_return({"message":"error in json format"})
-
-    #Se Retorna El Resultado De La Funcion De La DB
-    return result
-
-    """ #Si Se Agarra Algun Error Se Almacena Para Su Posterior Fix
-    except Exception as e:
-
-        #Se Extrae La Fecha Actual
-        fecha_actual = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Obtiene la fecha y hora actual
-        
-        #Se Genera El Mensaje De Error
-        mensaje_error = f'{fecha_actual} - Se ha producido un error en /register: {str(e)}\n'
-
-        #Se guarda En Los Registros De La DB
-        database.save_logs(mensaje_error)
-        
-        #Se Retorna Error De Procesamiento Para La Web
-        return usuarios_api.message_return({"message":"server internal error"},500) """
+        return database_api.message_return("Error Internal 500 Register",500)
 
  #API Login
 @app.route('/login',methods=['POST'])
 def login(): 
-    """ try:  """
 
-    #Se Recolecta El Archivo JSON
-    data = request.json
+    try:
+        data = request.json # Se Recolecta El Archivo JSON
 
-    #Se Utiliza La Funcion Login Por Email Y Password
-    result = usuarios_api.login_email(data['email'],data['password'])
+        result = usuarios_api.login_email(data['email'],data['password'])
 
-    #Se Retorna El Resultado De La Funcion
-    return (result)
-
+        return result
+    
+    except Exception as e:
+        database_api.logs("{}".format(e),"Automatic - /Login")
         
-
-    """ except Exception as e:
-
-        #Se Extrae La Fecha Actual
-        fecha_actual = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Obtiene la fecha y hora actual
-        
-        #Se Genera El Mensaje De Error
-        mensaje_error = f'{fecha_actual} - Se ha producido un error en /login: {str(e)}\n'
-
-        #Se guarda En Los Registros De La DB
-        database.save_logs(mensaje_error)
-        
-        #Se Retorna Error De Procesamiento Para La Web
-        return usuarios_api.message_return({"message":"server internal error"},500) """
+        return database_api.message_return("Error Internal 500 Login",500)
 
 #API Login verify
 @app.route('/verify',methods=['POST'])
 def verify():
-    """ try: """
+    try:
+        data = request.json
 
-    #Se Recolecta El Archivo JSON
-    data = request.json
+        result = usuarios_api.login_header(data['token_header'])
 
-    #Se Utiliza La Funcion Login Por Token Header
-    result = usuarios_api.login_header(data['token_header'])
+        return result
 
-    #Se Retornar El Resultado De La Función
-    return (result)
+    except Exception as e:
+        database_api.logs("{}".format(e),"Automatic - /verify")
 
-    """ except Exception as e:
-
-        #Se Extrae La Fecha Actual
-        fecha_actual = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Obtiene la fecha y hora actual
-        
-        #Se Genera El Mensaje De Error
-        mensaje_error = f'{fecha_actual} - Se ha producido un error en /maintain: {str(e)}\n'
-
-        #Se guarda En Los Registros De La DB
-        database.save_logs(mensaje_error)
-        
-        #Se Retorna Error De Procesamiento Para La Web
-        return usuarios_api.message_return({"message":"server internal error"},500) """
+        return database_api.message_return("Error Internal 500 Verify",500)
 
 
 """
