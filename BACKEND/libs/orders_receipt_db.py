@@ -31,9 +31,9 @@ class orders_receipt_db():
         self.conexion = pymysql.connect(
             #Host, Username, Password, Name DB, AutoCommit, AUTH.
             host=os.getenv("DATABASE_HOST"),
-            user=os.getenv("DATABASE_USERNAME"),
+            user=os.getenv("DATABASE_USER"),
             passwd=os.getenv("DATABASE_PASSWORD"),
-            db=os.getenv("DATABASE"),
+            db=os.getenv("DATABASE_NAME"),
             autocommit=True,
             ssl={ "rejecUnauthorized": False }
         )

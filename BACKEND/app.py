@@ -1,9 +1,11 @@
 from flask import Flask, request
 from flask_cors import CORS
-from libs.users_and_admins_db import users_admins_db
 from libs.orders_receipt_db import orders_and_receipt
 from libs.database import database
 #from libs.star_lumire import api_star_lumiere
+
+from libs.usuarios import usuarios_api
+from libs.database import database_api
 
 import datetime
 
@@ -23,32 +25,32 @@ def home():
 def register():
 
     #Se Usa Try Except Para Evadir Errores
-    try:
+    """ try: """
 
-        #Se Recolecta El Archivo JSON
-        data = request.json
+    #Se Recolecta El Archivo JSON
+    data = request.json
 
-        #Identificar Si Es Administrador
-        if data['rol'] == "Administrador":
+    #Identificar Si Es Administrador
+    if data['rol'] == "Administrador":
 
-            #Se Utiliza La Funcion De Agregar A Database Con Codigo (Administrador)
-            result = users_admins_db.agregar_user(data['username'],data['password'],data['email'],data['rol'],data['code'])
+        #Se Utiliza La Funcion De Agregar A Database Con Codigo (Administrador)
+        result = usuarios_api.crear_usuario(data['username'],data['password'],data['email'])
 
-        #Si No Es Administrador Se Agrega Normalmente
-        elif data['rol'] == "Usuario":
+    #Si No Es Administrador Se Agrega Normalmente
+    elif data['rol'] == "Usuario":
 
-            #Se Utiliza La Funcion De Agregar A Database
-            result = users_admins_db.agregar_user(data['username'],data['password'],data['email'],data['rol'])
+        #Se Utiliza La Funcion De Agregar A Database
+        result = usuarios_api.crear_usuario(data['username'],data['password'],data['email'])
 
-        else:
+    else:
             
-            #Se Crea Un Error
-            result = users_admins_db.message_return({"message":"error in json format"})
+        #Se Crea Un Error
+        result = database_api.message_return({"message":"error in json format"})
 
-        #Se Retorna El Resultado De La Funcion De La DB
-        return (result)
+    #Se Retorna El Resultado De La Funcion De La DB
+    return (result)
 
-    #Si Se Agarra Algun Error Se Almacena Para Su Posterior Fix
+    """ #Si Se Agarra Algun Error Se Almacena Para Su Posterior Fix
     except Exception as e:
 
         #Se Extrae La Fecha Actual
@@ -61,25 +63,25 @@ def register():
         database.save_logs(mensaje_error)
         
         #Se Retorna Error De Procesamiento Para La Web
-        return users_admins_db.message_return({"message":"server internal error"},500)
+        return usuarios_api.message_return({"message":"server internal error"},500) """
 
 #API Login
 @app.route('/login',methods=['POST'])
 def login():
-    try:
+    """ try: """
 
-        #Se Recolecta El Archivo JSON
-        data = request.json
+    #Se Recolecta El Archivo JSON
+    data = request.json
 
-        #Se Utiliza La Funcion Login Por Email Y Password
-        result = users_admins_db.login_email_pass(data['email'],data['password'])
+    #Se Utiliza La Funcion Login Por Email Y Password
+    result = usuarios_api.login_email(data['email'],data['password'])
 
-        #Se Retorna El Resultado De La Funcion
-        return (result)
+    #Se Retorna El Resultado De La Funcion
+    return (result)
 
         
 
-    except Exception as e:
+    """ except Exception as e:
 
         #Se Extrae La Fecha Actual
         fecha_actual = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Obtiene la fecha y hora actual
@@ -91,23 +93,23 @@ def login():
         database.save_logs(mensaje_error)
         
         #Se Retorna Error De Procesamiento Para La Web
-        return users_admins_db.message_return({"message":"server internal error"},500)
+        return usuarios_api.message_return({"message":"server internal error"},500) """
 
 #API Login verify
 @app.route('/verify',methods=['POST'])
 def verify():
-    try:
+    """ try: """
 
-        #Se Recolecta El Archivo JSON
-        data = request.json
+    #Se Recolecta El Archivo JSON
+    data = request.json
 
-        #Se Utiliza La Funcion Login Por Token Header
-        result = users_admins_db.login_token_header(data['token_header'])
+    #Se Utiliza La Funcion Login Por Token Header
+    result = usuarios_api.login_header(data['token_header'])
 
-        #Se Retornar El Resultado De La Función
-        return (result)
+    #Se Retornar El Resultado De La Función
+    return (result)
 
-    except Exception as e:
+    """ except Exception as e:
 
         #Se Extrae La Fecha Actual
         fecha_actual = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Obtiene la fecha y hora actual
@@ -119,7 +121,7 @@ def verify():
         database.save_logs(mensaje_error)
         
         #Se Retorna Error De Procesamiento Para La Web
-        return users_admins_db.message_return({"message":"server internal error"},500)
+        return usuarios_api.message_return({"message":"server internal error"},500) """
 
 #API Category 1 (Mostrar)
 @app.route('/category_plataforms',methods=['GET'])
@@ -289,5 +291,6 @@ def payeer():
     with open('payeer_2043637184.txt', 'r') as f:
         contenido = f.read()
     return contenido
+
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000, threaded=True)

@@ -1,126 +1,81 @@
-import pyotp
-from flask import make_response
-from dotenv import load_dotenv
 import os
 import pymysql
+from flask import make_response
+from dotenv import load_dotenv
 
 class database_c():
 
-    #Cargar Datos De .env
+    # Cargar datos de .env
     load_dotenv()
 
-    #Variables Recursiva
+    # Variables Recursivas
     conexion = None
     db = None
     codigo = os.getenv("OTP")
 
-    #Retorno De Mensajes
-    def message_return(self,text,status_code):
-
-        #Se Crea El Mensaje
+    # Retorno De Mensajes
+    def message_return(self, text, status_code):
+        # Se crea el mensaje
         message = make_response(text)
 
-        #Se Asigna El Satus Code
+        # Se asigna el status code
         message.status_code = status_code
 
-        #Se Retorna El Mensaje
+        # Se retorna el mensaje
         return message
 
-    #Conectarse A La DB
+    # Conectarse a la DB
     def conectar_db(self):
-
-        #Crear Conexion
-        self.conexion = pymysql.connect(
-            #Host, Username, Password, Name DB, AutoCommit, AUTH.
+        try:
+            self.conexion = pymysql.connect(
             host=os.getenv("DATABASE_HOST"),
-            user=os.getenv("DATABASE_USERNAME"),
+            user=os.getenv("DATABASE_USER"),
             passwd=os.getenv("DATABASE_PASSWORD"),
-            db=os.getenv("DATABASE"),
+            db=os.getenv("DATABASE_NAME"),
             autocommit=True,
             ssl={ "rejecUnauthorized": False }
         )
+            self.db = self.conexion.cursor()
 
-        #Crear Cursor
-        self.db = self.conexion.cursor()
-    
-    #Inicializar La DB Si Es Que No Existe
-    def inicializar_db(self):
+        except Exception as e:
+            print(f"Error al conectar a la base de datos: {str(e)}")
 
-        #Conectarse DB
-        self.conectar_db()
-
-        #Crear Logs
-        self.db.execute("""
-            CREATE TABLE IF NOT EXISTS Logs(
-                log_text VARCHAR (1024) NOT NULL
-            )
-        """)
-
-        #Desconectar DB
-        self.desconectar_DB
-
-        #Retorna Que Se Inicializo Bien La DB
-        return "DB Users And Admins Inicializado Correctamente"
-
-    #Desconecarse De La DB
-    def desconectar_DB(self):
+    # Desconectar de la DB
+    def desconectar_db(self):
 
         #Cerrar Cursor Y DB
         self.db.close()
         self.conexion.close()
 
-    #Certificar Codigo OTP Para Usar Funciones
-    def code_rol_validation(self, current_password):
+    # Guardar Actividades Logs
+    def logs(self,consulta,accion):
 
-        #Si La Contraseña No Se Envia Retorna Falso
-        if current_password == None:
-            return self.message_return("{'message':'False'}",401)
+        try:
+            self.conectar_db() #Se Conecta A La DB
 
-        #Si La Contraseña Es Una Cadena Vacia Retorna Falso
-        if not current_password:
-            return self.message_return("{'message':'False'}",401)
+            self.db.execute(""" INSERT INTO Logs (consulta,accion) VALUES ("{}","{}") """.format(consulta,accion))
 
-        #Si La Contraseña Es De Caracter Valido Se Genera El TOTP
-        totp = pyotp.TOTP(self.codigo)
+            self.desconectar_db() #Se Desconecta De La DB
 
-        #Si La Contraseña Es Correcta En Tiempo Real Se Retorna True
-        if totp.verify(current_password):
-            return self.message_return("{'message':'True'}",200)
+        except Exception as e:
+            print(e)
 
-        #Si No Coincide Se Retorna False
-        return self.message_return("{'message':'False'}",401)
+    # Manipular Database
+    def control_db(self,consulta,accion): #Realizar Consulta
+        try:
+            self.conectar_db() #Se Conecta A La DB
+            
+            self.db.execute("""{};""".format(consulta)) #Se Realiza La Busqueda Personalizada
 
-    #Realizar Consultas
-    def consult_db(self, consult):
+            data = self.db.fetchall() #Se Guardan
 
-        #Se Conecta A La DB
-        self.conectar_db()
+            self.desconectar_db() #Se Desconecta De La DB
+            
+            self.logs(consulta,accion)
 
-        #Se Realiza La Consulta Con La Insercion De Texto
-        self.db.execute(f"""
-            {consult}
-        """)
+            return data
 
-        #Se Almacena El Resultado
-        resp = self.db.fetchall()
+        except Exception as e:
+            print(e)
 
-        #Se Desconecta De La DB
-        self.desconectar_DB()
-
-        #Se Retorna El Mensaje Junto A Codigo 200
-        return self.message_return(str(resp),200)
-
-    #Guardar Errores
-    def save_logs(self,text):
-
-        #Se Conecta A La DB
-        self.conectar_db()
-        
-        #Se Inserta El Log En La DB
-        query = "INSERT INTO Logs (log_text) VALUES (%s)"
-        self.db.execute(query, (text,))
-
-        #Se Desconecta De La DB
-        self.desconectar_DB()
-
-database = database_c()
+database_api = database_c()
