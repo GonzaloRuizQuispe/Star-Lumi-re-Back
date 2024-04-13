@@ -1,9 +1,7 @@
-from database import database_api
-
-from crear_usuario import crear_usuario_api
-from login_email import login_email_api
-from login_header import login_header_api
-from cambiar_email import cambiar_email_api
+from libs.crear_usuario import crear_usuario_api
+from libs.login_email import login_email_api
+from libs.login_header import login_header_api
+from libs.cambiar_email import cambiar_email_api
 
 class Usuarios():
 
@@ -29,5 +27,3 @@ class Usuarios():
         pass
 
 usuarios_api = Usuarios()
-
-print(usuarios_api.cambiar_email(1,"Chacha@Gmail.com"))

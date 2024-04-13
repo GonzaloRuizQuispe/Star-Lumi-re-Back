@@ -1,5 +1,5 @@
-from database_c import database_api
-from gen_tokens import tokens_api
+from libs.database_c import database_api
+from libs.gen_tokens import tokens_api
 
 def crear_usuario_api(username,password,email): # Crear Usuario En La DB
         
