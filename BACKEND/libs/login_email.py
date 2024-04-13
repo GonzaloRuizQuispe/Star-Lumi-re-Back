@@ -10,7 +10,7 @@ def login_email_api(email,password):
 
         if resp_1: #Si Existe 
 
-            return database_api.message_return(resp_1,200)
+            return database_api.message_return(str(resp_1),200)
 
         else: # Si No Existe
 
