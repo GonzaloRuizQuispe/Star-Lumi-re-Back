@@ -9,7 +9,7 @@ def login_header_api(token_header):
 
         for id,username,password,email,token_header,token_acceso,rol,balance,a2f in resp_0:
 
-            data.append({"id":id,"username":username,"email":email,"token_header":token_header,"token_acceso":token_acceso,"rol":rol,"balance":balance,"a2f":a2f})
+            data.append({"id":f"{id}","username":f"{username}","email":f"{email}","token_header":f"{token_header}","token_acceso":f"{token_acceso}","rol":f"{rol}","balance":f"{balance}","a2f":f"{a2f}"})
 
         return database_api.message_return(data,200)
 
