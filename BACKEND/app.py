@@ -5,7 +5,6 @@ from flask_cors import CORS
 #from libs.star_lumire import api_star_lumiere
 
 from libs.usuarios import usuarios_api
-from libs.database_c import database_api
 
 #Se Crea La Web App
 app = Flask(__name__)
@@ -40,13 +39,13 @@ def register():
         #Se Utiliza La Funcion De Agregar A Database
         result = usuarios_api.crear_usuario(data['username'],data['password'],data['email'])
 
-    else:
+    """ else:
             
         #Se Crea Un Error
         result = database_api.message_return({"message":"error in json format"})
 
     #Se Retorna El Resultado De La Funcion De La DB
-    return result
+    return result """
 
     """ #Si Se Agarra Algun Error Se Almacena Para Su Posterior Fix
     except Exception as e:
