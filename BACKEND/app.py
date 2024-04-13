@@ -1,7 +1,6 @@
 from flask import Flask, request
 from flask_cors import CORS
 from libs.orders_receipt_db import orders_and_receipt
-from libs.database import database
 #from libs.star_lumire import api_star_lumiere
 
 from libs.usuarios import usuarios_api
