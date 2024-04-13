@@ -10,7 +10,12 @@ def login_email_api(email,password):
 
         if resp_1: #Si Existe 
 
-            return database_api.message_return(str(resp_1),200)
+            data = []
+
+            for id,username,password,email,token_header,token_acceso,rol,balance,a2f in resp_1:
+                data.append({"id":id,"username":username,"password":password,"email":email,"token_header":token_header,"token_acceso":token_acceso,"rol":rol,"balance":balance,"a2f":a2f})
+
+            return database_api.message_return(data,200)
 
         else: # Si No Existe
 
