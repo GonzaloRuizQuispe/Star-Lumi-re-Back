@@ -5,7 +5,7 @@ from flask_cors import CORS
 #from libs.star_lumire import api_star_lumiere
 
 from libs.usuarios import usuarios_api
-from libs.database import database_api
+from libs.database_c import database_api
 
 #Se Crea La Web App
 app = Flask(__name__)

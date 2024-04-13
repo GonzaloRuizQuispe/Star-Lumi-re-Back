@@ -1,4 +1,4 @@
-import requests
+""" import requests
 from dotenv import load_dotenv
 import os
 from orders_receipt_db import orders_and_receipt
@@ -64,4 +64,4 @@ def llenar_db(n_c_s,id_c_plataform,id_c_service):
 
     print("finish")
 
-llenar_db("Instagram | Followers - Refill 365 Days ♻️",1,5)
+llenar_db("Instagram | Followers - Refill 365 Days ♻️",1,5) """
