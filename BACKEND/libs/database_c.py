@@ -70,8 +70,6 @@ class database_c():
             data = self.db.fetchall() #Se Guardan
 
             self.desconectar_db() #Se Desconecta De La DB
-            
-            self.logs(consulta,accion)
 
             return data
 
