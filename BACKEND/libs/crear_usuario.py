@@ -12,6 +12,8 @@ def crear_usuario_api(username,password,email): # Crear Usuario En La DB
 
             resp_1 = database_api.control_db("INSERT INTO Usuarios (username,password,email,token_header,token_acceso) VALUES ('{}','{}','{}','{}','{}')".format(username,password,email,token_header,token_acceso),"Automatic - Created User") #Se Guardan Los Datos
 
+            return database_api.message_return("Created User",200)
+
         else: # Si La Lista No Esta Vacia
             
             print("Email Existente")
