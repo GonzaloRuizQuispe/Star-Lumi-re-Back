@@ -1,7 +1,7 @@
-from libs.crear_usuario import crear_usuario_api
-from libs.login_email import login_email_api
-from libs.login_header import login_header_api
-from libs.cambiar_email import cambiar_email_api
+from libs.users.crear_usuario import crear_usuario_api
+from libs.users.login_email import login_email_api
+from libs.users.login_header import login_header_api
+from libs.users.cambiar_email import cambiar_email_api
 
 class Usuarios():
 
