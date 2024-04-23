@@ -1,5 +1,0 @@
-2024-01-17 20:30:17 - Se ha producido un error en /service: too many values to unpack (expected 9)
-2024-01-17 20:31:15 - Se ha producido un error en /service: too many values to unpack (expected 9)
-2024-01-17 20:31:30 - Se ha producido un error en /service: too many values to unpack (expected 9)
-2024-01-17 20:31:45 - Se ha producido un error en /service: too many values to unpack (expected 9)
-2024-01-17 20:32:21 - Se ha producido un error en /service: too many values to unpack (expected 9)
