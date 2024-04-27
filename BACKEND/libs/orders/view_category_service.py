@@ -1,7 +1,7 @@
 from libs.database_c import database_api
 
 #Devolver Datos De Categoria De Servicio
-def view_category_service(self,id_c_plataform):
+def view_category_service(id_c_plataform):
         
     resp = database_api.control_db("SELECT * FROM C_Service WHERE id_c_plataform='{}'".format(id_c_plataform))
 

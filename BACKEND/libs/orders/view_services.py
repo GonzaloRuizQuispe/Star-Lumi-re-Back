@@ -1,7 +1,7 @@
 from libs.database_c import database_api
 
 #Devolver Datos De Los Servicios
-def view_services(self,id_c_service):
+def view_services(id_c_service):
     
     resp = database_api.control_db("SELECT * FROM Service WHERE id_c_service={}".format(id_c_service))
 
