@@ -61,7 +61,7 @@ class database_c():
             print(e)
 
     # Manipular Database
-    def control_db(self,consulta,accion): #Realizar Consulta
+    def control_db(self,consulta): #Realizar Consulta
         try:
             self.conectar_db() #Se Conecta A La DB
             
