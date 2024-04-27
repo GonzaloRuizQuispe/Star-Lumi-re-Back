@@ -16,7 +16,7 @@ class orders_receipt_db():
     def add_service(self,id_original,id_c_service,description):
         return add_service(id_original,id_c_service,description)
 
-    def view_category_plataform(self,id_ic_plataform):
+    def view_category_plataform(self):
         return view_category_plataform()
 
     def view_category_service(self,id_c_plataform):
