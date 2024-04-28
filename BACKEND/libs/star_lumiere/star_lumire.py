@@ -25,9 +25,8 @@ class star_lumiere():
         resp = requests.post(self.API_URL,data=data).json()
 
         data = []
-
         for x in resp:
-            if x['service'] in tuple_ids:
+            if x['service'] in str(tuple_ids):
                 data.append({"name":x["name"], "type":x["type"], "rate":x["rate"], "min":x["min"], "max":x["max"]})
 
         return data
