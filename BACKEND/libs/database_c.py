@@ -3,6 +3,7 @@ import pymysql
 from flask import make_response
 from dotenv import load_dotenv
 
+
 class database_c():
 
     # Cargar datos de .env

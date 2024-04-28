@@ -1,7 +1,6 @@
-""" import requests
+import requests
 from dotenv import load_dotenv
 import os
-from orders_receipt_db import orders_and_receipt
 
 class star_lumiere():
 
@@ -17,8 +16,7 @@ class star_lumiere():
     #En Cabezado Para Evitar Errores
     headers = {'User-Agent':'Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)'}
 
-    #Servicios Filtrados Por Categoria
-    def view_category(self,category):
+    def view_service(self,tuple_ids):
 
         #Se Llena La Accion A Realizar
         data = {'key':self.API_KEY, 'action':'services'}
@@ -26,21 +24,13 @@ class star_lumiere():
         #Se Hace La Consulta
         resp = requests.post(self.API_URL,data=data).json()
 
-        #Se Filtra Segun La Categoria Deseada
-        filtered_data = [item for item in resp if item['category'] == category]
+        data = []
 
-        #Se Retorna El Mensaje
-        return filtered_data
+        for x in resp:
+            if x['service'] in tuple_ids:
+                data.append({"name":x["name"], "type":x["type"], "rate":x["rate"], "min":x["min"], "max":x["max"]})
 
-    def view_service(self):
-
-        #Se Llena La Accion A Realizar
-        data = {'key':self.API_KEY, 'action':'services'}
-
-        #Se Hace La Consulta
-        resp = requests.post(self.API_URL,data=data).json()
-
-        return resp
+        return data
 
     def user_balance(self):
         data = {'key':self.API_KEY, 'action':'balance'}
@@ -49,19 +39,4 @@ class star_lumiere():
 
 api_star_lumiere = star_lumiere()
 
-#print(api_star_lumiere.user_balance())
-
-def llenar_db(n_c_s,id_c_plataform,id_c_service):
-    orders_and_receipt.add_category_service(n_c_s,id_c_plataform)
-
-    resp_1 = (api_star_lumiere.view_category(n_c_s))
-
-    print(len(resp_1))
-
-    for resp in resp_1:
-
-        orders_and_receipt.add_service(resp['service'],id_c_service,resp['name'],"",resp['type'],resp['min'],resp['max'],resp['rate'])
-
-    print("finish")
-
-llenar_db("Instagram | Followers - Refill 365 Days ♻️",1,5) """
+#print(api_star_lumiere.view_service(("15077","15493")))
