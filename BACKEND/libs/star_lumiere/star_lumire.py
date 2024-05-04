@@ -39,3 +39,5 @@ class star_lumiere():
 api_star_lumiere = star_lumiere()
 
 #print(api_star_lumiere.view_service(("15077","15493")))
+
+#print(api_star_lumiere.user_balance())
