@@ -2,7 +2,7 @@ import pyotp
 from libs.database_c import database_api
 
 #Generar Token Header Para Los Usuarios/Administradores
-def gen_token_header(self):
+def gen_token_header():
 
     #Se Genera El Token
     token = pyotp.random_base32(length=64)

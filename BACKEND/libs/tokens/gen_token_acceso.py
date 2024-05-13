@@ -1,7 +1,7 @@
 import pyotp
 from libs.database_c import database_api
 
-def gen_token_acceso(self):
+def gen_token_acceso():
 
     #Se Genera El Token
     token = pyotp.random_base32(length=32)
