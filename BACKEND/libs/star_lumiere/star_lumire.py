@@ -2,8 +2,8 @@ import requests
 from dotenv import load_dotenv
 import os
 
-from star_lumiere.view_categories import view_categorys
-from star_lumiere.view_services import view_services
+from libs.star_lumiere.view_categories import view_categorys
+from libs.star_lumiere.view_services import view_services
 
 class star_lumiere():
 
