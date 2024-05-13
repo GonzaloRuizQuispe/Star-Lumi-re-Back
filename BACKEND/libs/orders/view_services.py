@@ -10,7 +10,7 @@ def view_services(id_c_service):
     for x in resp:
         ids.append(x[1])
 
-    resp_1 = api_star_lumiere.view_service(ids)
+    resp_1 = api_star_lumiere.view_service_ids(ids)
 
     #Se Retorna El Mensaje Con Su Status
     return resp_1
