@@ -2,6 +2,9 @@ from libs.users.crear_usuario import crear_usuario_api
 from libs.users.login_email import login_email_api
 from libs.users.login_header import login_header_api
 from libs.users.cambiar_email import cambiar_email_api
+from libs.users.cambiar_balance import cambiar_balance
+from libs.users.cambiar_passwd import cambiar_passwd
+from libs.users.act_desc_a2f import act_desc_a2f
 
 class Usuarios():
 
@@ -17,13 +20,13 @@ class Usuarios():
     def cambiar_email(self,id,new_email):
         return cambiar_email_api(id,new_email)
 
-    def cambiar_contraseña():
-        pass
+    def cambiar_contraseña(self,id,old_passwd,new_passwd):
+        return cambiar_passwd(id,old_passwd,new_passwd)
 
-    def cambiar_balance():
-        pass
+    def cambiar_balance(self,new_balance,id):
+        return cambiar_balance(new_balance,id)
 
-    def activar_desactivar_a2f():
-        pass
+    def activar_desactivar_a2f(self,id):
+        return act_desc_a2f(id)
 
 usuarios_api = Usuarios()

@@ -25,6 +25,15 @@ class orders_receipt_db():
     def view_services(self,id_c_service):
         return view_services(id_c_service)
 
+    def change_description(self):
+        pass
+
+    def change_c_service(self):
+        pass
+
+    def change_c_plataform(self):
+        pass
+
 #Se Crea La Clase De Ordenes Y Recibos
 orders_api = orders_receipt_db()
 

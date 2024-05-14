@@ -8,3 +8,5 @@ def view_services(API_KEY,API_URL,Headers):
     resp = requests.post(API_URL,data=data).json()
 
     return resp
+
+#print(view_services("7b08dd9f72cc704ffb1d3e74997df7ff","https://smmengineer.com/api/v2",None))

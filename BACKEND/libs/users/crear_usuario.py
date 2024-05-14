@@ -3,7 +3,7 @@ from libs.tokens.gen_tokens import tokens_api
 
 def crear_usuario_api(username,password,email): # Crear Usuario En La DB
         
-        resp_0 = database_api.control_db("SELECT * FROM Usuarios WHERE BINARY email='{}'".format(email)) #Consultar Si Existe El Correo
+        resp_0 = database_api.control_db("SELECT * FROM Usuarios WHERE email='{}'".format(email)) #Consultar Si Existe El Correo
 
         if not resp_0: # Si La Lista Esta Vacia Se Accede
             
