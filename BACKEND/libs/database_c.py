@@ -104,14 +104,16 @@ resp = api_star_lumiere.view_services()
 
 s_servicio = []
 
+database_api.db.execute("SELECT * FROM C_Service")
+
+resp_1 = database_api.db.fetchall()
+
 for x in resp:
-    database_api.db.execute("SELECT * FROM C_Service WHERE name='{}'".format(x['category']))
+    for y in resp_1:
+        if x['category'] in y[2]:
+            database_api.db.execute("INSERT INTO Service (id_original,id_c_service) VALUES ('{}','{}')".format(x['service'],y[0]))
+        else:
+            s_servicio.append(x)
 
-    resp_1 = database_api.db.fetchall()
-    
-    if resp_1:
-        database_api.db.execute("INSERT INTO Service (id_original,id_c_service) VALUES ('{}','{}')".format(x['service'],resp_1[0][0]))
-    else:
-        s_servicio.append(x)
-
+print(s_servicio)
 #UP """

@@ -1,4 +1,3 @@
-from libs.database_c import database_api
 import requests
 
 def view_services_ids(tuple_ids,API_KEY,API_URL):
@@ -11,7 +10,9 @@ def view_services_ids(tuple_ids,API_KEY,API_URL):
         data = []
 
         for x in resp:
-            if x['service'] in str(tuple_ids):
-                data.append({"id":x['service'],"name":x["name"], "type":x["type"], "rate":x["rate"], "min":x["min"], "max":x["max"]})
-
+            if int(x['service']) in tuple_ids:
+                data.append({"id":x['service'],"name":x["name"], "type":x["type"], "rate":x["rate"], "min":x["min"], "max":x["max"],"category":x['category']})
+                
         return data
+
+#print(view_services_ids((1,1558),"7b08dd9f72cc704ffb1d3e74997df7ff","https://smmengineer.com/api/v2"))
