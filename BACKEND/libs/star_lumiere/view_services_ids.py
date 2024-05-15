@@ -15,4 +15,4 @@ def view_services_ids(tuple_ids,API_KEY,API_URL):
                 
         return data
 
-#print(view_services_ids((1,1558),"7b08dd9f72cc704ffb1d3e74997df7ff","https://smmengineer.com/api/v2"))
+#print(view_services_ids((14208,14209,14207,14206,14205,14204,14201),"7b08dd9f72cc704ffb1d3e74997df7ff","https://smmengineer.com/api/v2"))
