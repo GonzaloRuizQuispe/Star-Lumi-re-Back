@@ -104,6 +104,8 @@ def service():
         
         data = request.json
 
+        database_api.logs("{}".format(data),"/services")
+        
         return orders_api.view_services(data['id_c_service'])
 
     except Exception as e:
