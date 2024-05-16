@@ -1,8 +1,8 @@
 from libs.database_c import database_api
 import requests
 
-def orders_default(id,link,quantity,API_URL,API_KEY):
-    resp = database_api.control_db("SELECT * FROM Service WHERE id='{}'".format(id))
+def orders_default(id_service,link,quantity,API_URL,API_KEY):
+    resp = database_api.control_db("SELECT * FROM Service WHERE id='{}'".format(id_service))
 
     data = {'key':API_KEY, 'action':'add','service':resp[0][1],'link':link,'quantity':quantity}
 

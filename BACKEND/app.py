@@ -150,7 +150,7 @@ def orders():
 
         database_api.logs(str(data),"TEST 3")
 
-        services_api.add_orders(data['id_user'],data['link'],data['precio'],data['cantidad'],data['id'],data['type'])
+        services_api.add_orders(data['id_user'],data['link'],data['price_final'],data['quantity'],data['id_service'],data['type'])
 
         return "Funciona"
 

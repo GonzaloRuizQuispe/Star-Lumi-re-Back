@@ -36,8 +36,8 @@ class star_lumiere():
         resp = requests.post(self.API_URL,data=data).json()
         return resp
 
-    def orders_default(self,id,link,quantity):
-        return orders_default(id,link,quantity,self.API_URL,self.API_KEY)
+    def orders_default(self,id_service,link,quantity):
+        return orders_default(id_service,link,quantity,self.API_URL,self.API_KEY)
 
 api_star_lumiere = star_lumiere()
 
