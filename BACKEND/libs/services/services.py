@@ -28,8 +28,8 @@ class orders_receipt_db():
     def view_services(self,id_c_service):
         return view_services(id_c_service)
 
-    def add_orders(self,id_user,link,price,quantity,id_service,type):
-        return add_orders(id_user,link,price,quantity,id_service,type)
+    def add_orders(self,id_user,link,price,quantity,id_service,type,balance):
+        return add_orders(id_user,link,price,quantity,id_service,type,balance)
 
     def change_description(self):
         pass
