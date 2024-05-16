@@ -1,9 +1,9 @@
 from flask import Flask, request
 from flask_cors import CORS
 
-from libs.users.usuarios import usuarios_api
 from libs.database_c import database_api
-from libs.orders.orders import orders_api
+from libs.users.usuarios import usuarios_api
+from libs.services.services import services_api
 
 #Se Crea La Web App
 app = Flask(__name__)
@@ -72,7 +72,7 @@ def category_plataform():
     try:
 
         #Se Retornan Las Categoryas Plataform Disponibles
-        return orders_api.view_category_plataform()
+        return services_api.view_category_plataform()
 
     except Exception as e:
         
@@ -89,7 +89,7 @@ def category_service():
         data = request.json
 
         #Se Retornan Las Categorias Pertenecientes A La Plataforma
-        return (orders_api.view_category_service(data['id_c_plataform']))
+        return (services_api.view_category_service(data['id_c_plataform']))
 
     except Exception as e:
 
@@ -104,7 +104,7 @@ def service():
         
         data = request.json
         
-        return orders_api.view_services(data['id_c_service'])
+        return services_api.view_services(data['id_c_service'])
 
     except Exception as e:
 
@@ -119,7 +119,7 @@ def add_category_plataform():
         
         data = request.json
 
-        return orders_api.add_category_plataform(data['name'])
+        return services_api.add_category_plataform(data['name'])
 
     except Exception as e:
 
@@ -134,7 +134,7 @@ def add_category_service():
         
         data = request.json
 
-        return orders_api.add_category_service(data['name'],data['id_c_plataform'])
+        return services_api.add_category_service(data['name'],data['id_c_plataform'])
 
     except Exception as e:
 
@@ -148,7 +148,9 @@ def orders():
     try:
         data = request.json
 
-        orders_api.add_orders(data['id_user'],data['link'],data['precio'],data['cantidad'],data['id'],data['type'])
+        database_api.logs(str(data),"TEST")
+
+        services_api.add_orders(data['id_user'],data['link'],data['precio'],data['cantidad'],data['id'],data['type'])
 
         return "Funciona"
 

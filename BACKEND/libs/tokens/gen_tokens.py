@@ -1,5 +1,3 @@
-import pyotp
-from libs.database_c import database_api
 from libs.tokens.gen_token_header import gen_token_header
 from libs.tokens.gen_token_acceso import gen_token_acceso
 

@@ -1,12 +1,12 @@
-from libs.orders.add_category_plataform import add_category_plataform
-from libs.orders.add_category_service import add_category_service
-from libs.orders.add_service import add_service
+from libs.services.add_category_plataform import add_category_plataform
+from libs.services.add_category_service import add_category_service
+from libs.services.add_service import add_service
 
-from libs.orders.view_category_plataform import view_category_plataform
-from libs.orders.view_category_service import view_category_service
-from libs.orders.view_services import view_services
+from libs.services.view_category_plataform import view_category_plataform
+from libs.services.view_category_service import view_category_service
+from libs.services.view_services import view_services
 
-from libs.orders.add_orders import add_orders
+from libs.services.add_orders import add_orders
 
 class orders_receipt_db():
     
@@ -41,7 +41,7 @@ class orders_receipt_db():
         pass
 
 #Se Crea La Clase De Ordenes Y Recibos
-orders_api = orders_receipt_db()
+services_api = orders_receipt_db()
 
 #print(orders_and_receipt.inicializar_db())
 
