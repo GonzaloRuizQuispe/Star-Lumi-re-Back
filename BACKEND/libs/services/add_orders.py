@@ -12,5 +12,5 @@ def add_orders(id_user,link,price,quantity,id_service,type,balance):
     
     resp_1 = database_api.control_db("INSERT INTO Orders (id_original,id_user,link,price,quantity,id_service) VALUES ('{}','{}','{}','{}','{}','{}')".format(resp['order'],id_user,link,price,quantity,id_service))
     resp_2 = usuarios_api.cambiar_balance((float(balance)-float(price)),id_user)
-    
+
     return "201"
