@@ -18,7 +18,7 @@ def view_services_ids(tuple_ids,API_KEY,API_URL):
             if int(x['service']) in ids:
                 for y in tuple_ids:
                     if int(x['service']) == y[1]:
-                        data.append({"id":y[0], "name":x["name"], "type":x["type"], "rate":x["rate"], "min":x["min"], "max":x["max"], "category":x["category"], "description":y[3]})
+                        data.append({"id":str(y[0]), "name":x["name"], "type":x["type"], "rate":x["rate"], "min":x["min"], "max":x["max"], "category":x["category"], "description":y[3]})
         
         return data
 
