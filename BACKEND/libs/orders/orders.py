@@ -1,9 +1,12 @@
 from libs.orders.add_category_plataform import add_category_plataform
 from libs.orders.add_category_service import add_category_service
 from libs.orders.add_service import add_service
+
 from libs.orders.view_category_plataform import view_category_plataform
 from libs.orders.view_category_service import view_category_service
 from libs.orders.view_services import view_services
+
+from libs.orders.add_orders import add_orders
 
 class orders_receipt_db():
     
@@ -24,6 +27,9 @@ class orders_receipt_db():
 
     def view_services(self,id_c_service):
         return view_services(id_c_service)
+
+    def add_orders(self,id_user,link,price,quantity,id_service,type):
+        return add_orders(id_user,link,price,quantity,id_service,type)
 
     def change_description(self):
         pass

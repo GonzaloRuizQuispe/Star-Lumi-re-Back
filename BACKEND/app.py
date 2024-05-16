@@ -148,7 +148,9 @@ def orders():
     try:
         data = request.json
 
-        database_api.logs("{}".format(data),"/orders")
+        orders_api.add_orders(data['id_user'],data['link'],data['precio'],data['cantidad'],data['id'],data['type'])
+
+        database_api.logs(str(data),"orders")
 
         return "Funciona"
 
