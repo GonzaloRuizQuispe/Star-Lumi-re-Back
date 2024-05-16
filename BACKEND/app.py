@@ -150,8 +150,6 @@ def orders():
 
         orders_api.add_orders(data['id_user'],data['link'],data['precio'],data['cantidad'],data['id'],data['type'])
 
-        database_api.logs(str(data),"orders")
-
         return "Funciona"
 
     except Exception as e:
