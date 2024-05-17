@@ -16,4 +16,6 @@ def add_orders(id_user,link,price,quantity,id_service,type,balance):
     
     resp_2 = usuarios_api.cambiar_balance(new_balance,id_user)
 
-    return database_api.message_return("Order Created {}".format(resp_1),201)
+    json = {"order":resp_1,"new_balance":new_balance}
+
+    return database_api.message_return(json,201)
