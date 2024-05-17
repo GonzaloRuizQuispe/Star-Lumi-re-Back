@@ -9,4 +9,4 @@ def view_services(API_KEY,API_URL,Headers):
 
     return resp
 
-#print(view_services("7b08dd9f72cc704ffb1d3e74997df7ff","https://smmengineer.com/api/v2",None))
+#data = view_services("7b08dd9f72cc704ffb1d3e74997df7ff","https://smmengineer.com/api/v2",None)

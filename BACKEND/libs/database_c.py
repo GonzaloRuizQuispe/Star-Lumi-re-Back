@@ -85,6 +85,14 @@ class database_c():
                 self.desconectar_db() #Se Desconecta De La DB
 
                 return data
+            
+            else:
+
+                data = self.db.fetchall() #Se Guardan
+
+                self.desconectar_db() #Se Desconecta De La DB
+
+                return data
 
         except Exception as e:
             print(e)
