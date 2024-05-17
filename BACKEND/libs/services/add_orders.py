@@ -10,7 +10,10 @@ def add_orders(id_user,link,price,quantity,id_service,type,balance):
     elif type == "Otracosa":
         pass
     
-    resp_1 = database_api.control_db("INSERT INTO Orders (id_original,id_user,link,price,quantity,id_service) VALUES ('{}','{}','{}','{}','{}','{}')".format(resp['order'],id_user,link,price,quantity,id_service))
-    resp_2 = usuarios_api.cambiar_balance((float(balance)-float(price)),id_user)
+    new_balance = float(balance)-float(price)
 
-    return "201"
+    resp_1 = database_api.control_db("INSERT INTO Orders (id_original,id_user,link,price,quantity,id_service) VALUES ('{}','{}','{}','{}','{}','{}')".format(resp['order'],id_user,link,price,quantity,id_service))
+    
+    resp_2 = usuarios_api.cambiar_balance(new_balance,id_user)
+
+    return database_api.message_return("Order Created {}".format(resp_1),201)

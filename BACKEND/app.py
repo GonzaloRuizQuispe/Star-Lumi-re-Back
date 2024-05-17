@@ -148,11 +148,9 @@ def orders():
     try:
         data = request.json
 
-        database_api.logs(str(data),"TEST 3")
+        resp = services_api.add_orders(data['id_user'],data['link'],data['price_final'],data['quantity'],data['id_service'],data['type'],data['balance'])
 
-        services_api.add_orders(data['id_user'],data['link'],data['price_final'],data['quantity'],data['id_service'],data['type'],data['balance'])
-
-        return "Funciona"
+        return resp
 
     except Exception as e:
 

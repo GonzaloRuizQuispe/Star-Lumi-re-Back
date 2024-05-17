@@ -70,11 +70,21 @@ class database_c():
             
             self.db.execute("""{};""".format(consulta)) #Se Realiza La Busqueda Personalizada
 
-            data = self.db.fetchall() #Se Guardan
+            if "SELECT" in consulta:
 
-            self.desconectar_db() #Se Desconecta De La DB
+                data = self.db.fetchall() #Se Guardan
 
-            return data
+                self.desconectar_db() #Se Desconecta De La DB
+
+                return data
+
+            elif "INSERT" in consulta:
+
+                data = self.db.lastrowid
+
+                self.desconectar_db() #Se Desconecta De La DB
+
+                return data
 
         except Exception as e:
             print(e)
