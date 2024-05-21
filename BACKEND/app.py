@@ -105,7 +105,7 @@ def service():
         
         data = request.json
         
-        return services_api.view_services(data['id_c_service'])
+        return services_api.view_services(data['name'])
 
     except Exception as e:
 

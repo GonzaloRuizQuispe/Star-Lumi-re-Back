@@ -27,8 +27,8 @@ class services():
     def view_category_service(self,id_c_plataform):
         return view_category_service(id_c_plataform)
 
-    def view_services(self,id_c_service):
-        return view_services(id_c_service)
+    def view_services(self,name):
+        return view_services(name)
 
     def change_description(self,id_service,description):
         return change_description(id_service,description)

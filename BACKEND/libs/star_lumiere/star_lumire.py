@@ -22,9 +22,6 @@ class star_lumiere():
     #En Cabezado Para Evitar Errores
     headers = {'User-Agent':'Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)'}
 
-    def view_service_ids(self,tuple_ids):
-        return view_services_ids(tuple_ids,self.API_KEY,self.API_URL)
-
     def view_services(self):
         return view_services(self.API_KEY,self.API_URL,self.headers)
 
