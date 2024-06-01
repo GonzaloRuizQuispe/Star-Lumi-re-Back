@@ -12,7 +12,7 @@ def view_category_plataform():
     for id, name in resp:
 
         #Se Agrega A La Lista
-        data.append({"id":id,"name":f"{name}"})
+        data.append({"name":f"{name}"})
 
     #Se Retorna El Mensaje Con Su Status
     return data
