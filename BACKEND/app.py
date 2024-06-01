@@ -194,6 +194,8 @@ def orders():
 
         resp = api_orders.add_orders(data['id_user'],data['link'],data['quantity'],data['id_service'],data['type'])
 
+        database_api.logs("{}".format(data),"Pepe")
+
         return resp
 
     except Exception as e:
