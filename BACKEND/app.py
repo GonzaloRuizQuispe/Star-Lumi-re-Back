@@ -192,7 +192,7 @@ def orders():
     try:
         data = request.json
 
-        resp = api_orders.add_orders(data['id_user'],data['link'],data['price_final'],data['quantity'],data['id_service'],data['type'],data['balance'])
+        resp = api_orders.add_orders(data['id_user'],data['link'],data['quantity'],data['id_service'],data['type'])
 
         return resp
 
