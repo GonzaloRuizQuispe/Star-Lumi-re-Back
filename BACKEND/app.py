@@ -90,7 +90,7 @@ def category_service():
         data = request.json
 
         #Se Retornan Las Categorias Pertenecientes A La Plataforma
-        return (services_api.view_category_service(data['id_c_plataform']))
+        return (services_api.view_category_service(data['name']))
 
     except Exception as e:
 

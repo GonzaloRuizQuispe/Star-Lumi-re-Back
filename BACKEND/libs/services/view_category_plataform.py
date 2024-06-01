@@ -9,10 +9,9 @@ def view_category_plataform():
     data = []
 
     #Se Arma El JSON Iterando Los Objetos
-    for id, name in resp:
-
+    for x in resp:
         #Se Agrega A La Lista
-        data.append({"name":f"{name}"})
+        data.append({"name":f"{x[1]}"})
 
     #Se Retorna El Mensaje Con Su Status
     return data
