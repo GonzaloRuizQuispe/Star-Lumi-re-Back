@@ -128,63 +128,7 @@ def add_category_plataform():
 
         return database_api.message_return("Error Internal 500 Verify",500)
 
-#API Add Category Service (Agregar Categorias Semi-Senior)
-@app.route('/add_category_service',methods=['POST'])
-def add_category_service():
-    try:
-        
-        data = request.json
-
-        return services_api.add_category_service(data['name'],data['id_c_plataform'])
-
-    except Exception as e:
-
-        database_api.logs("{}".format(e),"Automatic - /add_category_service")
-
-        return database_api.message_return("Error Internal 500 Verify",500)
-
-@app.route('/change_description',methods=['POST'])
-def change_description():
-    try:
-        data = request.json
-
-        return services_api.change_description(data['id_service'],data['description'])
-
-    except Exception as e:
-
-        database_api.logs("{}".format(e),"Automatic - /change_description")
-
-        return database_api.message_return("Error Internal 500 Verify",500)
-
-@app.route('/change_c_plataform',methods=['POST'])
-def change_c_plataform():
-    try:
-        data = request.json
-
-        return services_api.change_c_plataform(data['id_c_service'],data['id_c_plataform'])
-
-    except Exception as e:
-
-        database_api.logs("{}".format(e),"Automatic - /change_c_plataform")
-
-        return database_api.message_return("Error Internal 500 Verify",500)
-
-@app.route('/change_c_service',methods=['POST'])
-def change_c_service():
-    try:
-
-        data = request.json
-
-        return services_api.change_c_service(data['id_service'],data['id_c_service'])
-
-    except Exception as e:
-
-        database_api.logs("{}".format(e),"Automatic - /change_c_service")
-
-        return database_api.message_return("Error Internal 500 Verify",500)
-
 ############################
-
 
 #API Services
 @app.route('/orders',methods=['POST'])
@@ -192,9 +136,7 @@ def orders():
     try:
         data = request.json
 
-        resp = api_orders.add_orders(data['id_user'],data['link'],data['quantity'],data['id_service'],data['type'])
-
-        database_api.logs("{}".format(data),"Pepe")
+        resp = api_orders.add_orders(data['id_user'],data['link'],data['quantity'],data['id_service'])
 
         return resp
 
