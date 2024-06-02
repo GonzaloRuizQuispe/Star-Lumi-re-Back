@@ -17,8 +17,8 @@ class Usuarios():
     def login_header(self,token_header):
         return login_header_api(token_header)
 
-    def cambiar_email(self,id,new_email):
-        return cambiar_email_api(id,new_email)
+    def cambiar_email(self,id,old_email,new_email):
+        return cambiar_email_api(id,old_email,new_email)
 
     def cambiar_contraseña(self,id,old_passwd,new_passwd):
         return cambiar_passwd(id,old_passwd,new_passwd)

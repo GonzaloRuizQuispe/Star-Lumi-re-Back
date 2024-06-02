@@ -64,6 +64,33 @@ def verify():
 
         return database_api.message_return("Error Internal 500 Verify",500)
 
+@app.route('/change_password', methods=['POST'])
+def change_password():
+    try:
+        data = request.json
+
+        result = usuarios_api.cambiar_contraseña(data['id_user'],data['old_passwd'],data['new_passwd'])
+
+        return result
+
+    except Exception as e:
+        database_api.logs("{}".format(e),"Automatic - /change_password")
+
+        return database_api.message_return("Error Internal 500 Verify",500)
+
+@app.route('/change_email',methods=['POST'])
+def change_email():
+    try:
+        data = request.json
+
+        result = usuarios_api.cambiar_email(data['id_user'],data['old_email'],data['new_email'])
+
+        return result
+        
+    except Exception as e:
+        database_api.logs("{}".format(e),"Automatic - /change_email")
+
+        return database_api.message_return("Error Internal 500 Verify",500)
 
 ############################
 
