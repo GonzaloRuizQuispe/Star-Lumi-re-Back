@@ -6,7 +6,7 @@ def login_email_api(email,password):
 
     if resp_0: # Si Existe
 
-        resp_1 = database_api.control_db("SELECT * FROM Usuarios WHERE email='{}' AND BINARY password='{}'".format(email,password)) # Consultar Si Existe El Email Con Contraseña
+        resp_1 = database_api.control_db("SELECT * FROM Usuarios WHERE email='{}' AND password='{}'".format(email,password)) # Consultar Si Existe El Email Con Contraseña
 
         if resp_1: #Si Existe 
 
