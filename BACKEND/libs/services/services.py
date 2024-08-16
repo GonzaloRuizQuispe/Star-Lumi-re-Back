@@ -5,7 +5,7 @@ from libs.services.view_category_service import view_category_service
 from libs.services.view_services import view_services
 
 class services():
-    
+
     def add_category_plataform(self,name):
         return add_category_plataform(name)
 

@@ -1,11 +1,9 @@
 import requests
 
-def view_categorys(API_KEY,API_URL,Headers):
-    #Se Llena La Accion A Realizar
-    data = {'key':API_KEY, 'action':'services'}
-
+def view_categorys(services):
+   
     #Se Hace La Consulta
-    resp = requests.post(API_URL,data=data).json()
+    resp = services
 
     data = []
     
