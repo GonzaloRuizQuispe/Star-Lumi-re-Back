@@ -62,7 +62,7 @@ class database_c():
         try:
             self.conectar_db() #Se Conecta A La DB
             
-            self.db.execute("""{};""".format(consulta)) #Se Realiza La Busqueda Personalizada
+            self.db.execute("{};".format(consulta)) #Se Realiza La Busqueda Personalizada
 
             if "SELECT" in consulta:
 
