@@ -47,11 +47,12 @@ class database_c():
     def logs(self,consulta,accion):
 
         try:
-            self.conectar_db() #Se Conecta A La DB
+            self.conectar_db()  # Se conecta a la DB
 
-            self.db.execute(""" INSERT INTO Logs (consulta,accion) VALUES ("{}","{}") """.format(consulta,accion))
+            # Usa una consulta preparada con parámetros
+            self.db.execute("INSERT INTO Logs (consulta, accion) VALUES (%s, %s)", (consulta, accion))
 
-            self.desconectar_db() #Se Desconecta De La DB
+            self.desconectar_db()  # Se desconecta de la DB
 
         except Exception as e:
             print(e)
