@@ -39,6 +39,9 @@ class database_c():
     # Desconectar de la DB
     def desconectar_db(self):
 
+        #Commit
+        self.conexion.commit()
+
         #Cerrar Cursor Y DB
         self.db.close()
         self.conexion.close()
@@ -59,11 +62,12 @@ class database_c():
 
     # Manipular Database
     def control_db(self,consulta): #Realizar Consulta
+        
         try:
             self.conectar_db() #Se Conecta A La DB
             
-            self.db.execute("{};".format(consulta)) #Se Realiza La Busqueda Personalizada
-
+            self.db.execute(consulta) #Se Realiza La Busqueda Personalizada
+            
             if "SELECT" in consulta:
 
                 data = self.db.fetchall() #Se Guardan
@@ -73,7 +77,7 @@ class database_c():
                 return data
 
             elif "INSERT" in consulta:
-
+                
                 data = self.db.lastrowid
 
                 self.desconectar_db() #Se Desconecta De La DB

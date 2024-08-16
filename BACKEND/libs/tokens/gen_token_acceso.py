@@ -6,7 +6,7 @@ def gen_token_acceso():
     #Se Genera El Token
     token = pyotp.random_base32(length=32)
 
-    resp = database_api.control_db((f"SELECT * FROM Usuarios WHERE token_acceso = '{token}'"))
+    resp = database_api.control_db((f"SELECT * FROM usuarios WHERE token_acceso = '{token}'"))
     #De No Hallar Similitud Se Retorna La Cadena
     if not resp:
         return token
